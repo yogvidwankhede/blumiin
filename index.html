@@ -149,18 +149,19 @@ nav{
   position:relative;
 }
 .nav-links a:hover{ opacity:1; }
-.nav-cta{
+.nav-links a.nav-cta{
   font-family:var(--mono);
   font-size:12.5px;
   font-weight:600;
   background:var(--ink);
   color:var(--paper);
+  opacity:1;
   padding:10px 18px;
   border-radius:4px;
   letter-spacing:0.02em;
-  transition:background 0.15s;
+  transition:background 0.15s, color 0.15s;
 }
-.nav-cta:hover{ background:var(--bottle); }
+.nav-links a.nav-cta:hover{ background:var(--bottle); color:var(--paper); opacity:1; }
 .nav-mobile-toggle{ display:none; }
 @media (max-width:860px){
   .nav-links a:not(.nav-cta){ display:none; }
@@ -796,6 +797,51 @@ footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
 }
 .reveal.in{ opacity:1; transform:translateY(0); }
 
+/* ============ THEME TOGGLE ============ */
+.theme-toggle{
+  width:38px; height:38px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--ink); opacity:0.78; flex-shrink:0;
+  transition:opacity 0.15s, background 0.15s;
+}
+.theme-toggle:hover{ opacity:1; background:var(--paper-dim); }
+.theme-toggle svg{ width:18px; height:18px; }
+.theme-toggle .icon-sun{ display:none; }
+:root[data-theme="dark"] .theme-toggle .icon-moon{ display:none; }
+:root[data-theme="dark"] .theme-toggle .icon-sun{ display:block; }
+
+/* ============ DARK THEME ============ */
+:root[data-theme="dark"]{
+  --ink:#ECE8DD;          /* now the light text + inverted-surface color */
+  --paper:#121A15;        /* page background */
+  --paper-dim:#1B2620;
+  --text:#E7E3D9;
+  --stone:#94A398;
+  --stone-lt:#3A463E;
+  --bottle:#63A781;       /* lifted green so accents read on dark */
+  --bottle-lt:#79bd97;
+  --amber:#E09A63;
+  --line:rgba(236,232,221,0.16);
+  --line-soft:rgba(236,232,221,0.08);
+}
+/* sticky header + wizard chrome (had hardcoded light backgrounds) */
+:root[data-theme="dark"] header{ background:rgba(18,26,21,0.9); }
+:root[data-theme="dark"] .wiz-head{ background:rgba(27,38,32,0.85); }
+/* sections that are dark-by-design must stay dark (they used --ink as bg) */
+:root[data-theme="dark"] .sourcing,
+:root[data-theme="dark"] footer{ background:#0E140F; color:var(--text); }
+:root[data-theme="dark"] .sourcing h2,
+:root[data-theme="dark"] .sourcing .section-lede,
+:root[data-theme="dark"] .footer-brand .logo-word{ color:var(--text); }
+:root[data-theme="dark"] .finder-visual{ background:#0E140F; color:var(--text); }
+:root[data-theme="dark"] .spectrum-col.mid{ background:#1C3328; color:var(--text); }
+:root[data-theme="dark"] .cta-section{ background:#264A39; color:var(--text); }
+:root[data-theme="dark"] .cta-section h2,
+:root[data-theme="dark"] .cta-section .section-lede{ color:var(--text); }
+/* hero specimen botanical strokes were hardcoded dark — relight them */
+:root[data-theme="dark"] .specimen-art path[stroke="#14231C"]{ stroke:#CDC8BA; }
+:root[data-theme="dark"] .specimen-art circle[fill="#2F5D45"]{ fill:#63A781; }
+
 /* =================================================================
    ============ FIND WHAT'S RIGHT FOR ME — MAIN FEATURE ============
    ================================================================= */
@@ -1079,6 +1125,15 @@ footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
 .herb-rank{
   font-family:var(--display); font-size:15px; color:var(--stone); flex-shrink:0;
 }
+.herb-cta-row{ display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:10px; }
+.herb-link{
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+  color:var(--bottle); border-bottom:1px solid transparent;
+  transition:border-color 0.15s, opacity 0.15s; opacity:0.9;
+}
+.herb-link:hover{ border-color:var(--bottle); opacity:1; }
+.herb-link svg{ width:12px; height:12px; }
 /* why expandable */
 .herb-why{ border-top:1px solid var(--line-soft); background:var(--paper-dim); }
 .herb-why-toggle{
@@ -1153,7 +1208,58 @@ footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
 .expert-opt:hover{ border-color:var(--bottle); transform:translateY(-2px); background:rgba(47,93,69,0.04); }
 .expert-opt-dur{ font-family:var(--mono); font-size:10.5px; color:var(--bottle); letter-spacing:0.03em; margin-bottom:7px; }
 .expert-opt-name{ font-weight:600; font-size:14px; color:var(--ink); line-height:1.35; }
+.expert-opt-bot{ border-color:var(--bottle); background:rgba(47,93,69,0.05); cursor:pointer; }
+.expert-opt-bot:hover{ background:rgba(47,93,69,0.09); }
+.bot-badge{
+  display:inline-block; font-family:var(--mono); font-size:9px; font-weight:600; letter-spacing:0.04em;
+  text-transform:uppercase; color:var(--paper); background:var(--bottle);
+  border-radius:20px; padding:2px 7px; margin-left:4px; vertical-align:middle;
+}
 @media (max-width:640px){ .expert-options{ grid-template-columns:1fr; } }
+/* ===== Quick Guidance chat ===== */
+.chat-step{ display:flex; flex-direction:column; min-height:440px; }
+.chat-back{
+  align-self:flex-start; font-size:13px; font-weight:600; color:var(--ink); opacity:0.6;
+  display:inline-flex; align-items:center; gap:6px; margin-bottom:16px; transition:opacity 0.15s;
+}
+.chat-back:hover{ opacity:1; }
+.chat-head{ display:flex; align-items:center; gap:13px; padding-bottom:16px; border-bottom:1px solid var(--line-soft); margin-bottom:16px; }
+.chat-avatar{
+  width:42px; height:42px; border-radius:50%; flex-shrink:0;
+  background:var(--bottle); color:var(--paper);
+  display:flex; align-items:center; justify-content:center;
+}
+.chat-avatar svg{ width:22px; height:24px; }
+.chat-title{ font-family:var(--display); font-size:19px; color:var(--ink); display:flex; align-items:center; gap:4px; }
+.chat-sub{ font-family:var(--mono); font-size:10.5px; color:var(--stone); letter-spacing:0.02em; margin-top:2px; }
+.chat-log{
+  flex:1; overflow-y:auto; max-height:360px; min-height:200px;
+  display:flex; flex-direction:column; gap:10px; padding:4px 2px 8px;
+}
+.chat-msg{
+  max-width:82%; padding:11px 15px; border-radius:14px; font-size:14px; line-height:1.55; word-wrap:break-word;
+}
+.chat-msg.bot{ align-self:flex-start; background:var(--paper-dim); color:var(--text); border:1px solid var(--line-soft); border-bottom-left-radius:4px; }
+.chat-msg.user{ align-self:flex-end; background:var(--ink); color:var(--paper); border-bottom-right-radius:4px; }
+.chat-msg.typing{ display:flex; gap:5px; align-items:center; padding:14px 16px; }
+.chat-msg.typing span{ width:7px; height:7px; border-radius:50%; background:var(--stone); opacity:0.5; animation:chatdot 1.2s infinite ease-in-out; }
+.chat-msg.typing span:nth-child(2){ animation-delay:0.2s; }
+.chat-msg.typing span:nth-child(3){ animation-delay:0.4s; }
+@keyframes chatdot{ 0%,60%,100%{ transform:translateY(0); opacity:0.4; } 30%{ transform:translateY(-4px); opacity:0.9; } }
+.chat-inputbar{ display:flex; gap:10px; align-items:center; margin-top:14px; }
+.chat-input{
+  flex:1; border:1px solid var(--line); border-radius:24px; padding:12px 18px;
+  font-family:var(--body); font-size:14px; color:var(--ink); background:var(--paper); transition:border-color 0.15s;
+}
+.chat-input:focus{ outline:none; border-color:var(--bottle); }
+.chat-send{
+  width:44px; height:44px; flex-shrink:0; border-radius:50%;
+  background:var(--ink); color:var(--paper);
+  display:flex; align-items:center; justify-content:center; transition:background 0.15s, transform 0.12s;
+}
+.chat-send:hover{ background:var(--bottle); transform:translateY(-1px); }
+.chat-send svg{ width:18px; height:18px; }
+.chat-disclaim{ font-size:11.5px; color:var(--stone); line-height:1.45; margin-top:12px; text-align:center; }
 /* follow up */
 .followup-card{
   border:1px dashed var(--line); border-radius:10px; padding:22px 24px; background:var(--paper-dim);
@@ -1182,6 +1288,18 @@ footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
 }
 .res-restart:hover{ border-color:var(--bottle); background:rgba(47,93,69,0.04); }
 </style>
+<script>
+  /* Apply saved theme before paint to avoid a flash of the wrong theme */
+  (function () {
+    try {
+      var saved = localStorage.getItem('blumiin-theme');
+      var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.setAttribute('data-theme', 'dark');
+      }
+    } catch (e) {}
+  })();
+</script>
 </head>
 <body>
 <div class="paper-texture"></div>
@@ -1203,6 +1321,10 @@ footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
       <a href="#pillars">Evidence</a>
       <a href="#journal">Your Journal</a>
       <a href="#safety">Safety</a>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" title="Toggle light / dark theme">
+        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.5M12 19.5V22M4.2 4.2l1.8 1.8M18 18l1.8 1.8M2 12h2.5M19.5 12H22M4.2 19.8 6 18M18 6l1.8-1.8"/></svg>
+      </button>
       <a href="#finder" class="nav-cta" data-open-wizard>Find what's right for me →</a>
     </div>
   </nav>
@@ -1651,6 +1773,19 @@ footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
 
   /* ===== Tag tooltip keyboard access ===== */
   document.querySelectorAll('.tag').forEach(tag=>{ if(!tag.hasAttribute('tabindex')) tag.setAttribute('tabindex','0'); });
+
+  /* ===== Dark / light theme toggle ===== */
+  (function(){
+    var root=document.documentElement;
+    var btn=document.getElementById('themeToggle');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
+      var isDark = root.getAttribute('data-theme')==='dark';
+      if(isDark){ root.removeAttribute('data-theme'); }
+      else { root.setAttribute('data-theme','dark'); }
+      try{ localStorage.setItem('blumiin-theme', isDark ? 'light' : 'dark'); }catch(e){}
+    });
+  })();
 </script>
 <script>
 /* =====================================================================
@@ -1671,6 +1806,16 @@ footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
   /* ---------- helper: tier label ---------- */
   function tierLabel(t) {
     return t === 't3' ? 'T3 · Clinical' : (t === 't2' ? 'T2 · Preliminary' : 'T1 · Traditional');
+  }
+
+  /* ---------- helper: evidence link for an herb ----------
+     Points to the peer-reviewed evidence behind the herb (by botanical name).
+     When Blumiin's own 3-Lens remedy pages exist, set herb.evidenceUrl to that
+     internal page and it will be used instead. */
+  function evidenceUrl(herb) {
+    if (herb.evidenceUrl) return herb.evidenceUrl;
+    var q = (herb.latin || herb.name).replace(/\([^)]*\)/g, '').trim();
+    return 'https://pubmed.ncbi.nlm.nih.gov/?term=' + encodeURIComponent(q);
   }
 
   /* ---------- the questions ---------- */
@@ -1990,6 +2135,7 @@ footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
     state.idx = 0; state.answers = {}; state.message = '';
+    state._chat = null; state._results = null; state._chatBusy = false;
     foot.style.display = 'flex';
     render();
   }
@@ -2227,7 +2373,10 @@ footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
       '<div><div class="expert-title">Talk to a verified expert</div>' +
       '<div class="expert-text">' + (a.meds === 'yes' ? 'Because you’re taking medication, a quick conversation with a verified herbal-wellness expert or therapist is the safest next step.' : 'Based on your responses, you may benefit from speaking with a verified therapist or herbal-wellness expert before you begin.') + '</div></div></div>' +
       '<div class="expert-options">' +
-      expertOpt('15 min', 'Quick Guidance') +
+      '<button class="expert-opt expert-opt-bot" id="wizChatOpen">' +
+      '<div class="expert-opt-dur">AI · Instant</div>' +
+      '<div class="expert-opt-name">Quick Guidance <span class="bot-badge">Chat-Bot</span></div>' +
+      '</button>' +
       expertOpt('30 min', 'Personalized Plan') +
       expertOpt('60 min', 'Full Wellness Assessment') +
       '</div></div>';
@@ -2261,13 +2410,20 @@ footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
     h += '</div>';
     body.innerHTML = h;
 
+    // remember results so we can return here from the chat view
+    state._results = { topHerbs: topHerbs, insight: insight };
+
     // wire interactions
     body.querySelectorAll('.herb-why-toggle').forEach(function (t) {
       t.addEventListener('click', function () { t.closest('.herb-why').classList.toggle('open'); });
     });
+    var chatOpen = document.getElementById('wizChatOpen');
+    if (chatOpen) chatOpen.addEventListener('click', openChat);
     var restart = document.getElementById('wizRestart');
     if (restart) restart.addEventListener('click', function () {
-      foot.style.display = 'flex'; state.idx = 0; state.answers = {}; state.message = ''; render();
+      foot.style.display = 'flex'; state.idx = 0; state.answers = {}; state.message = '';
+      state._chat = null; state._results = null; state._chatBusy = false;
+      render();
       body.scrollTop = 0; overlay.scrollTop = 0;
     });
     var followBtns = body.querySelectorAll('.followup-opt');
@@ -2278,6 +2434,95 @@ footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
       });
     });
     overlay.scrollTop = 0;
+  }
+
+  /* ===================================================================
+     QUICK GUIDANCE — Groq-backed chat-bot
+     =================================================================== */
+  function chatContextString() {
+    var a = state.answers;
+    var herbs = (state._results && state._results.topHerbs)
+      ? state._results.topHerbs.map(function (h) { return h.name; }).join(', ') : '';
+    return 'Primary goal: ' + (GOAL_LABEL[a.goal] || 'n/a') +
+      '. Severity: ' + (SEVERITY_LABEL[a.severity] || 'n/a') +
+      '. Duration: ' + (DURATION_LABEL[a.duration] || 'n/a') +
+      '. Preferred approach: ' + (APPROACH_LABEL[a.approach] || 'n/a') +
+      '. Experience: ' + (EXPERIENCE_LABEL[a.experience] || 'n/a') +
+      '. Taking medications: ' + (a.meds || 'n/a') +
+      '. Herbs Blumiin recommended: ' + (herbs || 'n/a') + '.';
+  }
+  function chatFallback() {
+    return "I'm having trouble connecting right now. In the meantime: introduce any new herb one at a time at a low dose, give it about 2–3 weeks, and watch how you feel. If you take medications or have ongoing or worsening symptoms, please check with a healthcare professional before starting — or book a session with a verified Blumiin expert.";
+  }
+  function openChat() {
+    if (!state._chat || !state._chat.length) {
+      var goalL = (GOAL_LABEL[state.answers.goal] || 'your goals').toLowerCase();
+      state._chat = [{ role: 'assistant', content: "Hi — I'm Blumiin's Quick Guidance assistant. I can see you're focused on " + goalL + ". Ask me anything about the herbs we suggested, how to take them, or what to watch out for, and I'll keep it simple and honest. (I'm an AI, not a doctor.)" }];
+    }
+    renderChatView();
+  }
+  function renderChatView() {
+    foot.style.display = 'none';
+    progressWrap.style.display = 'none';
+    stepName.textContent = '';
+    body.innerHTML = '<div class="wiz-step active chat-step">' +
+      '<button class="chat-back" id="chatBack">← Back to results</button>' +
+      '<div class="chat-head">' +
+      '<div class="chat-avatar"><svg viewBox="0 0 24 26" fill="none"><path d="M12 24V7" stroke="currentColor" stroke-width="1.5"/><path d="M12 14c0 0-6-1-7-6 0 0 7.5 0 7 6z" stroke="currentColor" stroke-width="1.2"/><path d="M12 18c0 0 6-1 7-6 0 0-7.5 0-7 6z" stroke="currentColor" stroke-width="1.2"/></svg></div>' +
+      '<div><div class="chat-title">Quick Guidance <span class="bot-badge">Chat-Bot</span></div>' +
+      '<div class="chat-sub">AI guidance · personalized to your assessment</div></div>' +
+      '</div>' +
+      '<div class="chat-log" id="chatLog"></div>' +
+      '<div class="chat-inputbar">' +
+      '<input class="chat-input" id="chatInput" type="text" autocomplete="off" placeholder="Ask about herbs, dosing, or safety…" />' +
+      '<button class="chat-send" id="chatSend" aria-label="Send message"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>' +
+      '</div>' +
+      '<div class="chat-disclaim">Blumiin’s AI gives general guidance, not medical advice. For anything involving medications or symptoms, please consult a healthcare professional.</div>' +
+      '</div>';
+    renderChatLog();
+    document.getElementById('chatBack').addEventListener('click', function () {
+      renderResults(state._results.topHerbs, state._results.insight);
+    });
+    var input = document.getElementById('chatInput');
+    var send = document.getElementById('chatSend');
+    function doSend() { var v = input.value.trim(); if (!v || state._chatBusy) return; input.value = ''; sendChat(v); }
+    send.addEventListener('click', doSend);
+    input.addEventListener('keydown', function (e) { if (e.key === 'Enter') { e.preventDefault(); doSend(); } });
+    input.focus();
+    overlay.scrollTop = 0;
+  }
+  function renderChatLog(typing) {
+    var log = document.getElementById('chatLog');
+    if (!log) return;
+    var html = state._chat.map(function (m) {
+      var cls = m.role === 'user' ? 'chat-msg user' : 'chat-msg bot';
+      return '<div class="' + cls + '">' + escapeHtml(m.content).replace(/\n/g, '<br>') + '</div>';
+    }).join('');
+    if (typing) html += '<div class="chat-msg bot typing"><span></span><span></span><span></span></div>';
+    log.innerHTML = html;
+    log.scrollTop = log.scrollHeight;
+  }
+  function sendChat(text) {
+    state._chat.push({ role: 'user', content: text });
+    state._chatBusy = true;
+    renderChatLog(true);
+    var ctrl = new AbortController();
+    var to = setTimeout(function () { ctrl.abort(); }, 20000);
+    fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ messages: state._chat, context: chatContextString() }),
+      signal: ctrl.signal
+    }).then(function (r) { clearTimeout(to); if (!r.ok) throw new Error('bad'); return r.json(); })
+      .then(function (d) {
+        state._chat.push({ role: 'assistant', content: (d && d.reply) ? d.reply : chatFallback() });
+        state._chatBusy = false; renderChatLog();
+      })
+      .catch(function () {
+        clearTimeout(to);
+        state._chat.push({ role: 'assistant', content: chatFallback() });
+        state._chatBusy = false; renderChatLog();
+      });
   }
 
   function profileRow(label, val, risk) {
@@ -2297,7 +2542,8 @@ footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
       '<div class="herb-info">' +
       '<div class="herb-name">' + escapeHtml(herb.name) + '</div>' +
       '<div class="herb-benefits">' + benefits + '</div>' +
-      '<div style="margin-top:10px;"><span class="tag ' + tier + '">' + tierLabel(tier) + '</span></div>' +
+      '<div class="herb-cta-row"><span class="tag ' + tier + '">' + tierLabel(tier) + '</span>' +
+      '<a class="herb-link" href="' + evidenceUrl(herb) + '" target="_blank" rel="noopener noreferrer">View the evidence <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M9 7h8v8"/></svg></a></div>' +
       '</div>' +
       '<div class="herb-rank">#' + (i + 1) + '</div>' +
       '</div>' +
