@@ -1,0 +1,2390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blumiin — Herbal Discovery, Evidence-Tagged</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --ink:        #14231C;   /* deep botanical ink */
+  --paper:      #FAF7F0;   /* pressed paper cream */
+  --paper-dim:  #F1ECE0;
+  --bottle:     #2F5D45;   /* primary accent / structural green */
+  --bottle-lt:  #3E7359;
+  --amber:      #C97B4A;   /* earned accent — T3 only */
+  --stone:      #7A8B7F;   /* muted text / dividers */
+  --stone-lt:   #C7CDC4;
+  --text:       #1A1A1A;
+  --line:       rgba(20,35,28,0.14);
+  --line-soft:  rgba(20,35,28,0.08);
+  --display: 'Fraunces', serif;
+  --body: 'Inter', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+  --max: 1180px;
+}
+*{ margin:0; padding:0; box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  background:var(--paper);
+  color:var(--text);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+img,svg{ display:block; max-width:100%; }
+a{ color:inherit; text-decoration:none; }
+button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+.wrap{ max-width:var(--max); margin:0 auto; padding:0 32px; }
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.01ms !important; transition-duration:0.01ms !important; }
+}
+:focus-visible{
+  outline:2px solid var(--bottle);
+  outline-offset:3px;
+  border-radius:2px;
+}
+/* ============ TEXTURE ============ */
+.paper-texture{
+  position:fixed; inset:0; pointer-events:none; z-index:0;
+  opacity:0.4;
+  background-image:
+    radial-gradient(circle at 20% 30%, rgba(20,35,28,0.015) 0%, transparent 50%),
+    radial-gradient(circle at 80% 70%, rgba(20,35,28,0.02) 0%, transparent 50%);
+}
+.noise{
+  position:fixed; inset:0; pointer-events:none; z-index:1; opacity:0.03; mix-blend-mode:multiply;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+/* ============ EVIDENCE TAG (signature element) ============ */
+.tag{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-family:var(--mono);
+  font-size:11px;
+  font-weight:600;
+  letter-spacing:0.04em;
+  padding:3px 9px 3px 7px;
+  border-radius:3px;
+  border:1px solid currentColor;
+  position:relative;
+  cursor:help;
+  white-space:nowrap;
+  text-transform:uppercase;
+}
+.tag::before{
+  content:'';
+  width:6px; height:6px;
+  border-radius:50%;
+  background:currentColor;
+  flex-shrink:0;
+}
+.tag.t1{ color:var(--stone); background:rgba(122,139,127,0.08); }
+.tag.t2{ color:var(--bottle); background:rgba(47,93,69,0.08); }
+.tag.t3{ color:var(--amber); background:rgba(201,123,74,0.1); }
+.tag-tip{
+  position:absolute;
+  bottom:calc(100% + 10px);
+  left:50%;
+  transform:translateX(-50%) translateY(4px);
+  width:240px;
+  background:var(--ink);
+  color:var(--paper);
+  font-family:var(--body);
+  font-size:12.5px;
+  font-weight:400;
+  text-transform:none;
+  letter-spacing:0;
+  padding:12px 14px;
+  border-radius:6px;
+  line-height:1.5;
+  opacity:0;
+  visibility:hidden;
+  transition:opacity 0.18s ease, transform 0.18s ease;
+  z-index:50;
+  pointer-events:none;
+}
+.tag-tip::after{
+  content:'';
+  position:absolute;
+  top:100%; left:50%;
+  transform:translateX(-50%);
+  border:6px solid transparent;
+  border-top-color:var(--ink);
+}
+.tag:hover .tag-tip, .tag:focus-visible .tag-tip{
+  opacity:1; visibility:visible; transform:translateX(-50%) translateY(0);
+}
+.tag:focus-visible{ outline-offset:4px; }
+/* ============ NAV ============ */
+header{
+  position:sticky; top:0; z-index:100;
+  background:rgba(250,247,240,0.92);
+  backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line-soft);
+}
+nav{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 32px;
+  max-width:var(--max); margin:0 auto;
+}
+.logo-mark{ display:flex; align-items:center; gap:10px; }
+.logo-mark svg{ width:30px; height:30px; }
+.logo-word{
+  font-family:var(--display);
+  font-size:22px;
+  font-weight:600;
+  letter-spacing:-0.01em;
+  color:var(--ink);
+}
+.nav-links{ display:flex; gap:36px; align-items:center; }
+.nav-links a{
+  font-size:14px; font-weight:500; color:var(--ink); opacity:0.75;
+  transition:opacity 0.15s;
+  position:relative;
+}
+.nav-links a:hover{ opacity:1; }
+.nav-cta{
+  font-family:var(--mono);
+  font-size:12.5px;
+  font-weight:600;
+  background:var(--ink);
+  color:var(--paper);
+  padding:10px 18px;
+  border-radius:4px;
+  letter-spacing:0.02em;
+  transition:background 0.15s;
+}
+.nav-cta:hover{ background:var(--bottle); }
+.nav-mobile-toggle{ display:none; }
+@media (max-width:860px){
+  .nav-links a:not(.nav-cta){ display:none; }
+  nav{ padding:16px 20px; }
+}
+/* ============ HERO ============ */
+.hero{
+  position:relative;
+  padding:88px 32px 0;
+  overflow:hidden;
+}
+.hero-grid{
+  max-width:var(--max);
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:1.05fr 0.95fr;
+  gap:40px;
+  align-items:center;
+}
+.hero-eyebrow{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--bottle);
+  margin-bottom:22px;
+  display:flex; align-items:center; gap:10px;
+}
+.hero-eyebrow::before{
+  content:'';
+  width:24px; height:1px;
+  background:var(--bottle);
+}
+h1{
+  font-family:var(--display);
+  font-weight:500;
+  font-size:clamp(40px, 5.2vw, 68px);
+  line-height:1.04;
+  letter-spacing:-0.015em;
+  color:var(--ink);
+  margin-bottom:26px;
+}
+h1 em{
+  font-style:italic;
+  font-weight:400;
+  color:var(--bottle);
+}
+.hero-sub{
+  font-size:18px;
+  line-height:1.65;
+  color:var(--text);
+  opacity:0.82;
+  max-width:480px;
+  margin-bottom:34px;
+}
+.hero-actions{
+  display:flex;
+  gap:14px;
+  margin-bottom:46px;
+  flex-wrap:wrap;
+}
+.btn-primary{
+  background:var(--ink);
+  color:var(--paper);
+  padding:15px 26px;
+  border-radius:5px;
+  font-size:14.5px;
+  font-weight:600;
+  letter-spacing:0.01em;
+  transition:background 0.18s, transform 0.18s;
+  display:inline-flex; align-items:center; gap:8px;
+}
+.btn-primary:hover{ background:var(--bottle); transform:translateY(-1px); }
+.btn-secondary{
+  border:1px solid var(--line);
+  color:var(--ink);
+  padding:15px 26px;
+  border-radius:5px;
+  font-size:14.5px;
+  font-weight:600;
+  transition:border-color 0.18s, background 0.18s;
+}
+.btn-secondary:hover{ border-color:var(--bottle); background:rgba(47,93,69,0.05); }
+.hero-tags{ display:flex; gap:10px; flex-wrap:wrap; }
+/* Specimen card */
+.specimen{
+  position:relative;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:3px;
+  padding:30px 28px 26px;
+  box-shadow:0 1px 2px rgba(20,35,28,0.04), 0 18px 40px -18px rgba(20,35,28,0.18);
+  transform:rotate(0.6deg);
+}
+.specimen::before{
+  content:'';
+  position:absolute;
+  inset:10px;
+  border:1px dashed var(--line);
+  border-radius:2px;
+  pointer-events:none;
+}
+.specimen-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  margin-bottom:18px;
+  position:relative; z-index:2;
+}
+.specimen-num{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--stone);
+  letter-spacing:0.04em;
+}
+.specimen-art{
+  height:230px;
+  display:flex; align-items:center; justify-content:center;
+  margin:6px 0 20px;
+  position:relative; z-index:2;
+}
+.specimen-art svg{ width:200px; height:220px; }
+.specimen-name{
+  font-family:var(--display);
+  font-style:italic;
+  font-size:21px;
+  color:var(--ink);
+  text-align:center;
+  margin-bottom:4px;
+  position:relative; z-index:2;
+}
+.specimen-latin{
+  font-family:var(--body);
+  font-size:12.5px;
+  color:var(--stone);
+  text-align:center;
+  margin-bottom:18px;
+  position:relative; z-index:2;
+}
+.specimen-foot{
+  display:flex;
+  justify-content:center;
+  gap:8px;
+  position:relative; z-index:2;
+}
+@media (max-width:900px){
+  .hero-grid{ grid-template-columns:1fr; }
+  .specimen{ max-width:340px; margin:0 auto; transform:rotate(0deg); }
+}
+/* ============ MARQUEE / TRUST STRIP ============ */
+.trust-strip{
+  border-top:1px solid var(--line-soft);
+  border-bottom:1px solid var(--line-soft);
+  background:var(--paper-dim);
+  padding:22px 0;
+  margin-top:80px;
+  overflow:hidden;
+}
+.trust-row{
+  display:flex;
+  justify-content:space-between;
+  max-width:var(--max);
+  margin:0 auto;
+  padding:0 32px;
+  flex-wrap:wrap;
+  gap:18px 36px;
+}
+.trust-item{
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--mono);
+  font-size:12.5px;
+  color:var(--ink);
+  opacity:0.75;
+}
+.trust-item .dot{ width:5px; height:5px; border-radius:50%; background:var(--bottle); flex-shrink:0; }
+/* ============ SECTION SCAFFOLD ============ */
+section{ padding:120px 0; position:relative; }
+.section-head{
+  max-width:680px;
+  margin-bottom:64px;
+}
+.section-head.center{ margin-left:auto; margin-right:auto; text-align:center; }
+.eyebrow{
+  font-family:var(--mono);
+  font-size:12px;
+  font-weight:500;
+  letter-spacing:0.08em;
+  text-transform:uppercase;
+  color:var(--bottle);
+  margin-bottom:16px;
+  display:flex; align-items:center; gap:10px;
+}
+.section-head.center .eyebrow{ justify-content:center; }
+.eyebrow::before{ content:''; width:18px; height:1px; background:var(--bottle); }
+.section-head.center .eyebrow::before{ display:none; }
+h2{
+  font-family:var(--display);
+  font-weight:500;
+  font-size:clamp(30px, 3.4vw, 44px);
+  line-height:1.12;
+  letter-spacing:-0.01em;
+  color:var(--ink);
+  margin-bottom:18px;
+}
+.section-lede{
+  font-size:17px;
+  color:var(--text);
+  opacity:0.75;
+  line-height:1.65;
+}
+/* ============ SITUATION / SPECTRUM ============ */
+.situation{ background:var(--paper); }
+.spectrum{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:0;
+  border:1px solid var(--line);
+  border-radius:6px;
+  overflow:hidden;
+  margin-bottom:28px;
+}
+.spectrum-col{
+  padding:36px 30px;
+  border-right:1px solid var(--line);
+  position:relative;
+}
+.spectrum-col:last-child{ border-right:none; }
+.spectrum-col.mid{
+  background:var(--ink);
+  color:var(--paper);
+}
+.spec-label{
+  font-family:var(--mono);
+  font-size:11.5px;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  opacity:0.6;
+  margin-bottom:14px;
+}
+.spec-title{
+  font-family:var(--display);
+  font-size:22px;
+  font-weight:500;
+  margin-bottom:12px;
+}
+.spec-desc{
+  font-size:14.5px;
+  opacity:0.72;
+  line-height:1.6;
+  margin-bottom:16px;
+}
+.spec-sources{
+  font-family:var(--mono);
+  font-size:11.5px;
+  opacity:0.55;
+  line-height:1.7;
+}
+.spectrum-col.mid .spec-sources{ opacity:0.7; }
+.spec-arrow{
+  position:absolute;
+  top:50%;
+  right:-13px;
+  transform:translateY(-50%);
+  z-index:5;
+  width:26px; height:26px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:13px;
+  color:var(--stone);
+}
+@media (max-width:780px){
+  .spectrum{ grid-template-columns:1fr; }
+  .spectrum-col{ border-right:none; border-bottom:1px solid var(--line); }
+  .spec-arrow{ display:none; }
+}
+/* ============ PILLARS ============ */
+.pillars{ background:var(--paper-dim); }
+.pillar{
+  display:grid;
+  grid-template-columns:0.85fr 1.15fr;
+  gap:60px;
+  align-items:start;
+  padding:64px 0;
+  border-bottom:1px solid var(--line);
+}
+.pillar:last-child{ border-bottom:none; }
+.pillar-num{
+  font-family:var(--mono);
+  font-size:13px;
+  color:var(--stone);
+  letter-spacing:0.04em;
+}
+.pillar-label{
+  font-family:var(--mono);
+  font-size:12px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  color:var(--bottle);
+  margin:14px 0 14px;
+}
+.pillar-title{
+  font-family:var(--display);
+  font-size:30px;
+  font-weight:500;
+  line-height:1.15;
+  color:var(--ink);
+  margin-bottom:16px;
+}
+.pillar-desc{
+  font-size:15.5px;
+  color:var(--text);
+  opacity:0.78;
+  line-height:1.65;
+}
+.pillar-sticky{ position:sticky; top:120px; }
+@media (max-width:900px){
+  .pillar{ grid-template-columns:1fr; gap:28px; }
+  .pillar-sticky{ position:static; }
+}
+/* Tier table (Pillar 1) */
+.tier-table{
+  border:1px solid var(--line);
+  border-radius:6px;
+  overflow:hidden;
+  background:var(--paper);
+}
+.tier-row{
+  display:grid;
+  grid-template-columns:80px 160px 1fr;
+  border-bottom:1px solid var(--line);
+  align-items:center;
+}
+.tier-row:last-child{ border-bottom:none; }
+.tier-row.head{
+  background:var(--ink);
+  color:var(--paper);
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  opacity:0.85;
+}
+.tier-cell{ padding:18px 18px; }
+.tier-row.head .tier-cell{ padding:13px 18px; }
+.tier-cell.label{ font-weight:600; font-size:14px; }
+.tier-cell.desc{ font-size:13.5px; opacity:0.75; line-height:1.55; }
+@media (max-width:560px){
+  .tier-row{ grid-template-columns:60px 1fr; }
+  .tier-row > .tier-cell.desc{ grid-column:1 / -1; padding-top:0; }
+}
+/* Example remedy card with tags (Pillar 1 demo) */
+.remedy-demo{
+  margin-top:28px;
+  border:1px solid var(--line);
+  border-radius:6px;
+  padding:24px 26px;
+  background:var(--paper);
+}
+.remedy-demo-head{
+  display:flex; justify-content:space-between; align-items:flex-start; gap:16px;
+  margin-bottom:14px;
+  flex-wrap:wrap;
+}
+.remedy-name{ font-family:var(--display); font-size:19px; color:var(--ink); }
+.remedy-claims{ display:flex; flex-direction:column; gap:10px; }
+.remedy-claim{
+  display:flex; align-items:center; gap:12px;
+  font-size:14px;
+  padding:10px 0;
+  border-top:1px solid var(--line-soft);
+}
+.remedy-claim:first-child{ border-top:none; }
+.remedy-claim span{ flex:1; opacity:0.85; }
+/* Journal mock (Pillar 2) */
+.journal-mock{
+  border:1px solid var(--line);
+  border-radius:8px;
+  background:var(--paper);
+  overflow:hidden;
+}
+.journal-top{
+  background:var(--ink);
+  color:var(--paper);
+  padding:16px 20px;
+  display:flex; justify-content:space-between; align-items:center;
+}
+.journal-top span{ font-family:var(--mono); font-size:11.5px; opacity:0.7; }
+.journal-body{ padding:22px 22px 24px; }
+.journal-row{
+  display:flex; align-items:center; gap:14px;
+  padding:13px 0;
+  border-bottom:1px solid var(--line-soft);
+  font-size:13.5px;
+}
+.journal-row:last-child{ border-bottom:none; }
+.journal-row .jicon{
+  width:28px; height:28px; border-radius:50%;
+  background:rgba(47,93,69,0.1);
+  display:flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  font-size:13px;
+}
+.journal-row strong{ font-weight:600; }
+.journal-stat{
+  margin-top:18px;
+  padding:18px 18px;
+  background:var(--paper-dim);
+  border-radius:6px;
+  border:1px solid var(--line-soft);
+}
+.journal-stat-num{
+  font-family:var(--display);
+  font-size:30px;
+  color:var(--bottle);
+  font-weight:500;
+}
+.journal-stat-text{ font-size:13px; opacity:0.7; margin-top:4px; line-height:1.5; }
+/* Safety panel (Pillar 3) */
+.safety-mock{
+  border:1px solid var(--line);
+  border-radius:8px;
+  overflow:hidden;
+  background:var(--paper);
+}
+.safety-alert{
+  display:flex; gap:14px; align-items:flex-start;
+  padding:20px 22px;
+  background:rgba(201,123,74,0.08);
+  border-bottom:1px solid var(--line);
+}
+.safety-alert .aicon{
+  width:30px; height:30px; flex-shrink:0;
+  border-radius:50%;
+  background:var(--amber);
+  color:var(--paper);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-weight:700; font-size:14px;
+}
+.safety-alert-title{ font-weight:600; font-size:14.5px; margin-bottom:4px; }
+.safety-alert-text{ font-size:13.5px; opacity:0.78; line-height:1.55; }
+.safety-list{ padding:6px 22px 18px; }
+.safety-item{
+  display:flex; align-items:center; gap:12px;
+  padding:13px 0;
+  border-bottom:1px solid var(--line-soft);
+  font-size:13.5px;
+}
+.safety-item:last-child{ border-bottom:none; }
+.safety-item .sdot{ width:6px; height:6px; border-radius:50%; flex-shrink:0; }
+.sdot.ok{ background:var(--bottle); }
+.sdot.warn{ background:var(--amber); }
+/* ============ TRUST CONCEPTS GRID ============ */
+.trust-section{ background:var(--paper); }
+.trust-grid{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+  border-radius:6px;
+  overflow:hidden;
+}
+.trust-card{
+  background:var(--paper);
+  padding:36px 30px;
+}
+.trust-card-icon{
+  width:42px; height:42px;
+  margin-bottom:20px;
+}
+.trust-card-title{
+  font-family:var(--display);
+  font-size:19px;
+  font-weight:500;
+  color:var(--ink);
+  margin-bottom:10px;
+}
+.trust-card-desc{
+  font-size:14px;
+  opacity:0.72;
+  line-height:1.6;
+}
+@media (max-width:860px){
+  .trust-grid{ grid-template-columns:1fr; }
+}
+/* ============ SOURCING / STORYTELLING ============ */
+.sourcing{ background:var(--ink); color:var(--paper); }
+.sourcing .eyebrow{ color:#9FD4B4; }
+.sourcing .eyebrow::before{ background:#9FD4B4; }
+.sourcing h2{ color:var(--paper); }
+.sourcing .section-lede{ color:var(--paper); opacity:0.7; }
+.origin-cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+.origin-card{
+  border:1px solid rgba(250,247,240,0.16);
+  border-radius:8px;
+  overflow:hidden;
+  background:rgba(250,247,240,0.03);
+  transition:border-color 0.2s, background 0.2s;
+}
+.origin-card:hover{ border-color:rgba(250,247,240,0.32); background:rgba(250,247,240,0.05); }
+.origin-art{
+  height:160px;
+  display:flex; align-items:center; justify-content:center;
+  background:rgba(250,247,240,0.04);
+  border-bottom:1px solid rgba(250,247,240,0.1);
+}
+.origin-art svg{ width:90px; height:90px; opacity:0.92; }
+.origin-body{ padding:22px 22px 24px; }
+.origin-loc{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.05em;
+  text-transform:uppercase;
+  color:#9FD4B4;
+  margin-bottom:10px;
+}
+.origin-title{
+  font-family:var(--display);
+  font-size:19px;
+  margin-bottom:10px;
+}
+.origin-desc{ font-size:13.5px; opacity:0.68; line-height:1.6; margin-bottom:16px; }
+.origin-meta{
+  display:flex; justify-content:space-between;
+  font-family:var(--mono); font-size:11px;
+  opacity:0.55;
+  padding-top:14px;
+  border-top:1px solid rgba(250,247,240,0.1);
+}
+@media (max-width:860px){ .origin-cards{ grid-template-columns:1fr; } }
+/* ============ ONBOARDING STRIP ============ */
+.onboard{ background:var(--paper-dim); }
+.onboard-flow{
+  display:flex;
+  align-items:stretch;
+  gap:0;
+  border:1px solid var(--line);
+  border-radius:8px;
+  overflow:hidden;
+  background:var(--paper);
+}
+.onboard-step{
+  flex:1;
+  padding:30px 24px;
+  border-right:1px solid var(--line);
+  position:relative;
+}
+.onboard-step:last-child{ border-right:none; }
+.onboard-step-num{
+  font-family:var(--mono);
+  font-size:11px;
+  color:var(--stone);
+  margin-bottom:14px;
+}
+.onboard-step-title{
+  font-size:14.5px;
+  font-weight:600;
+  margin-bottom:8px;
+  line-height:1.4;
+}
+.onboard-step-desc{
+  font-size:13px;
+  opacity:0.65;
+  line-height:1.55;
+}
+@media (max-width:900px){
+  .onboard-flow{ flex-direction:column; }
+  .onboard-step{ border-right:none; border-bottom:1px solid var(--line); }
+  .onboard-step:last-child{ border-bottom:none; }
+}
+/* ============ CTA ============ */
+.cta-section{
+  background:var(--bottle);
+  color:var(--paper);
+  text-align:center;
+  padding:100px 32px;
+}
+.cta-section h2{ color:var(--paper); margin-bottom:20px; }
+.cta-section .section-lede{ color:var(--paper); opacity:0.82; max-width:520px; margin:0 auto 38px; }
+.cta-section .btn-primary{ background:var(--paper); color:var(--ink); }
+.cta-section .btn-primary:hover{ background:var(--ink); color:var(--paper); }
+/* ============ FOOTER ============ */
+footer{ background:var(--ink); color:var(--paper); padding:64px 0 32px; }
+.footer-top{
+  display:flex; justify-content:space-between; gap:60px;
+  padding-bottom:48px;
+  border-bottom:1px solid rgba(250,247,240,0.12);
+  flex-wrap:wrap;
+}
+.footer-brand{ max-width:300px; }
+.footer-brand .logo-word{ color:var(--paper); }
+.footer-tagline{ font-size:13.5px; opacity:0.55; margin-top:14px; line-height:1.6; }
+.footer-cols{ display:flex; gap:56px; flex-wrap:wrap; }
+.footer-col-title{
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.06em;
+  text-transform:uppercase;
+  opacity:0.5;
+  margin-bottom:16px;
+}
+.footer-col a{
+  display:block;
+  font-size:14px;
+  opacity:0.72;
+  margin-bottom:11px;
+  transition:opacity 0.15s;
+}
+.footer-col a:hover{ opacity:1; }
+.footer-bottom{
+  display:flex; justify-content:space-between; align-items:center;
+  padding-top:28px;
+  font-size:12.5px;
+  opacity:0.45;
+  flex-wrap:wrap;
+  gap:12px;
+}
+@media (max-width:700px){
+  .footer-top{ flex-direction:column; gap:32px; }
+}
+/* ============ REVEAL ON SCROLL ============ */
+.reveal{
+  opacity:0;
+  transform:translateY(18px);
+  transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+}
+.reveal.in{ opacity:1; transform:translateY(0); }
+
+/* =================================================================
+   ============ FIND WHAT'S RIGHT FOR ME — MAIN FEATURE ============
+   ================================================================= */
+/* --- Feature intro section --- */
+.finder{ background:var(--paper); }
+.finder-panel{
+  position:relative;
+  border:1px solid var(--line);
+  border-radius:12px;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 88% 12%, rgba(47,93,69,0.07) 0%, transparent 45%),
+    var(--paper);
+  display:grid;
+  grid-template-columns:1.1fr 0.9fr;
+}
+.finder-panel::before{
+  content:'';
+  position:absolute; inset:14px;
+  border:1px dashed var(--line);
+  border-radius:8px;
+  pointer-events:none;
+}
+.finder-copy{ padding:54px 50px; position:relative; z-index:2; }
+.finder-kicker{
+  font-family:var(--mono);
+  font-size:12px; font-weight:600; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--bottle);
+  display:flex; align-items:center; gap:10px;
+  margin-bottom:20px;
+}
+.finder-kicker::before{ content:''; width:18px; height:1px; background:var(--bottle); }
+.finder-title{
+  font-family:var(--display); font-weight:500;
+  font-size:clamp(30px,3.3vw,42px); line-height:1.1; letter-spacing:-0.01em;
+  color:var(--ink); margin-bottom:18px;
+}
+.finder-title em{ font-style:italic; color:var(--bottle); font-weight:400; }
+.finder-lede{ font-size:16.5px; line-height:1.65; opacity:0.8; max-width:440px; margin-bottom:28px; }
+.finder-mini{
+  display:flex; flex-direction:column; gap:12px; margin-bottom:32px;
+}
+.finder-mini-item{
+  display:flex; align-items:flex-start; gap:12px; font-size:14px; line-height:1.5;
+}
+.finder-mini-item .mnum{
+  flex-shrink:0; width:24px; height:24px; border-radius:50%;
+  background:rgba(47,93,69,0.1); color:var(--bottle);
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  display:flex; align-items:center; justify-content:center;
+}
+.finder-mini-item span{ opacity:0.82; }
+.finder-mini-item strong{ font-weight:600; opacity:1; }
+.btn-finder{
+  background:var(--ink); color:var(--paper);
+  padding:16px 28px; border-radius:6px;
+  font-size:15px; font-weight:600;
+  display:inline-flex; align-items:center; gap:10px;
+  transition:background 0.18s, transform 0.18s;
+}
+.btn-finder:hover{ background:var(--bottle); transform:translateY(-1px); }
+.btn-finder svg{ width:18px; height:18px; }
+.finder-note{ font-family:var(--mono); font-size:11px; color:var(--stone); margin-top:16px; letter-spacing:0.02em; }
+/* finder visual side */
+.finder-visual{
+  position:relative; z-index:2;
+  border-left:1px solid var(--line);
+  background:var(--ink);
+  color:var(--paper);
+  padding:46px 40px;
+  display:flex; flex-direction:column; justify-content:center; gap:18px;
+}
+.fv-card{
+  border:1px solid rgba(250,247,240,0.18);
+  border-radius:8px;
+  background:rgba(250,247,240,0.04);
+  padding:18px 20px;
+}
+.fv-card-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.fv-card-name{ font-family:var(--display); font-style:italic; font-size:19px; }
+.fv-scores{ display:flex; gap:18px; }
+.fv-score{ flex:1; }
+.fv-score-label{ font-family:var(--mono); font-size:9.5px; letter-spacing:0.04em; text-transform:uppercase; opacity:0.6; margin-bottom:5px; }
+.fv-score-num{ font-family:var(--display); font-size:22px; font-weight:500; color:#9FD4B4; }
+.fv-bar{ height:4px; border-radius:2px; background:rgba(250,247,240,0.15); margin-top:6px; overflow:hidden; }
+.fv-bar i{ display:block; height:100%; background:#9FD4B4; border-radius:2px; }
+.fv-tag{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--mono); font-size:10px; font-weight:600; letter-spacing:0.04em; text-transform:uppercase;
+  color:#9FD4B4; border:1px solid #9FD4B4; border-radius:3px; padding:2px 8px;
+}
+.fv-meta{ font-family:var(--mono); font-size:10.5px; opacity:0.55; }
+@media (max-width:900px){
+  .finder-panel{ grid-template-columns:1fr; }
+  .finder-copy{ padding:40px 30px; }
+  .finder-visual{ border-left:none; border-top:1px solid var(--line); padding:36px 30px; }
+}
+/* --- Wizard overlay --- */
+.wiz-overlay{
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(20,35,28,0.55);
+  backdrop-filter:blur(5px);
+  display:none;
+  align-items:flex-start; justify-content:center;
+  padding:40px 20px;
+  overflow-y:auto;
+}
+.wiz-overlay.open{ display:flex; }
+.wiz{
+  width:100%; max-width:760px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:0 30px 80px -20px rgba(20,35,28,0.5);
+  position:relative;
+  overflow:hidden;
+  animation:wizIn 0.4s cubic-bezier(0.16,1,0.3,1);
+}
+@keyframes wizIn{ from{ opacity:0; transform:translateY(16px) scale(0.99); } to{ opacity:1; transform:none; } }
+.wiz-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 24px;
+  border-bottom:1px solid var(--line-soft);
+  background:rgba(250,247,240,0.7);
+  position:sticky; top:0; z-index:5;
+  backdrop-filter:blur(6px);
+}
+.wiz-head .logo-mark svg{ width:24px; height:24px; }
+.wiz-head .logo-word{ font-size:18px; }
+.wiz-progress-wrap{ flex:1; margin:0 22px; }
+.wiz-progress-meta{
+  display:flex; justify-content:space-between;
+  font-family:var(--mono); font-size:10.5px; color:var(--stone); letter-spacing:0.03em;
+  margin-bottom:6px;
+}
+.wiz-progress{ height:5px; border-radius:3px; background:var(--paper-dim); overflow:hidden; }
+.wiz-progress i{ display:block; height:100%; width:0; background:var(--bottle); border-radius:3px; transition:width 0.4s cubic-bezier(0.16,1,0.3,1); }
+.wiz-close{
+  width:34px; height:34px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  color:var(--ink); font-size:18px; opacity:0.6; transition:opacity 0.15s, background 0.15s;
+  flex-shrink:0;
+}
+.wiz-close:hover{ opacity:1; background:var(--paper-dim); }
+.wiz-body{ padding:40px 44px 36px; min-height:340px; }
+@media (max-width:560px){ .wiz-body{ padding:30px 22px; } }
+.wiz-step{ display:none; animation:stepIn 0.35s cubic-bezier(0.16,1,0.3,1); }
+.wiz-step.active{ display:block; }
+@keyframes stepIn{ from{ opacity:0; transform:translateX(12px); } to{ opacity:1; transform:none; } }
+.wiz-q-label{
+  font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--bottle); margin-bottom:14px;
+}
+.wiz-q-title{
+  font-family:var(--display); font-weight:500; font-size:28px; line-height:1.15; letter-spacing:-0.01em;
+  color:var(--ink); margin-bottom:8px;
+}
+.wiz-q-sub{ font-size:14.5px; opacity:0.7; margin-bottom:26px; line-height:1.55; }
+/* option grid */
+.opt-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+.opt-grid.single{ grid-template-columns:1fr; }
+.opt{
+  display:flex; align-items:center; gap:12px;
+  border:1px solid var(--line); border-radius:8px;
+  padding:16px 18px; font-size:15px; font-weight:500; color:var(--ink);
+  background:var(--paper); text-align:left; width:100%;
+  transition:border-color 0.15s, background 0.15s, transform 0.1s;
+}
+.opt:hover{ border-color:var(--bottle); background:rgba(47,93,69,0.04); }
+.opt .opt-mark{
+  width:20px; height:20px; border-radius:50%;
+  border:1.5px solid var(--stone-lt); flex-shrink:0;
+  display:flex; align-items:center; justify-content:center;
+  transition:border-color 0.15s, background 0.15s;
+}
+.opt .opt-mark svg{ width:11px; height:11px; opacity:0; transform:scale(0.5); transition:opacity 0.15s, transform 0.15s; color:var(--paper); }
+.opt.selected{ border-color:var(--bottle); background:rgba(47,93,69,0.07); }
+.opt.selected .opt-mark{ border-color:var(--bottle); background:var(--bottle); }
+.opt.selected .opt-mark svg{ opacity:1; transform:scale(1); }
+@media (max-width:560px){ .opt-grid{ grid-template-columns:1fr; } }
+/* message step */
+.wiz-textarea{
+  width:100%; min-height:150px; resize:vertical;
+  border:1px solid var(--line); border-radius:8px;
+  padding:16px 18px; font-family:var(--body); font-size:15px; line-height:1.6; color:var(--ink);
+  background:var(--paper); transition:border-color 0.15s;
+}
+.wiz-textarea:focus{ outline:none; border-color:var(--bottle); }
+.wiz-example{
+  margin-top:14px; padding:14px 16px; border-left:3px solid var(--stone-lt);
+  background:var(--paper-dim); border-radius:0 6px 6px 0;
+  font-size:13.5px; line-height:1.55; color:var(--text); opacity:0.75; font-style:italic;
+}
+.wiz-skip-note{ font-family:var(--mono); font-size:11px; color:var(--stone); margin-top:14px; }
+/* footer nav */
+.wiz-foot{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:18px 44px 26px; gap:14px;
+}
+@media (max-width:560px){ .wiz-foot{ padding:16px 22px 22px; } }
+.wiz-back{
+  font-size:14px; font-weight:600; color:var(--ink); opacity:0.6;
+  display:inline-flex; align-items:center; gap:7px; transition:opacity 0.15s;
+  padding:10px 4px;
+}
+.wiz-back:hover{ opacity:1; }
+.wiz-back[disabled]{ opacity:0; pointer-events:none; }
+.wiz-next{
+  background:var(--ink); color:var(--paper);
+  padding:14px 28px; border-radius:6px; font-size:14.5px; font-weight:600;
+  display:inline-flex; align-items:center; gap:9px;
+  transition:background 0.18s, transform 0.15s, opacity 0.15s;
+}
+.wiz-next:hover{ background:var(--bottle); transform:translateY(-1px); }
+.wiz-next[disabled]{ opacity:0.4; pointer-events:none; }
+/* loading */
+.wiz-loading{ text-align:center; padding:48px 0; }
+.wiz-spinner{
+  width:46px; height:46px; margin:0 auto 22px;
+  border:3px solid var(--paper-dim); border-top-color:var(--bottle);
+  border-radius:50%; animation:spin 0.9s linear infinite;
+}
+@keyframes spin{ to{ transform:rotate(360deg); } }
+.wiz-loading-text{ font-family:var(--display); font-style:italic; font-size:20px; color:var(--ink); }
+.wiz-loading-sub{ font-family:var(--mono); font-size:11.5px; color:var(--stone); margin-top:10px; letter-spacing:0.03em; }
+/* ===== RESULTS ===== */
+.res-hero{
+  text-align:center; padding:6px 0 30px; border-bottom:1px solid var(--line-soft); margin-bottom:30px;
+}
+.res-badge{
+  font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:0.07em; text-transform:uppercase;
+  color:var(--bottle); margin-bottom:12px;
+}
+.res-hero h3{
+  font-family:var(--display); font-weight:500; font-size:30px; color:var(--ink); letter-spacing:-0.01em;
+}
+.res-block-label{
+  font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:0.06em; text-transform:uppercase;
+  color:var(--bottle); margin:34px 0 16px; display:flex; align-items:center; gap:10px;
+}
+.res-block-label::before{ content:''; width:16px; height:1px; background:var(--bottle); }
+.res-block-label:first-of-type{ margin-top:0; }
+/* profile card */
+.profile-card{
+  border:1px solid var(--line); border-radius:10px; background:var(--paper-dim);
+  padding:6px 24px;
+}
+.profile-row{
+  display:flex; align-items:flex-start; gap:12px;
+  padding:14px 0; border-bottom:1px solid var(--line-soft); font-size:14.5px;
+}
+.profile-row:last-child{ border-bottom:none; }
+.profile-row .pcheck{
+  flex-shrink:0; width:22px; height:22px; border-radius:50%; background:var(--bottle); color:var(--paper);
+  display:flex; align-items:center; justify-content:center; margin-top:1px;
+}
+.profile-row .pcheck svg{ width:12px; height:12px; }
+.profile-row.risk .pcheck{ background:var(--amber); }
+.profile-row b{ font-weight:600; color:var(--ink); }
+.profile-row span{ opacity:0.82; }
+/* recommended herbs */
+.herb-card{
+  border:1px solid var(--line); border-radius:10px; background:var(--paper);
+  margin-bottom:14px; overflow:hidden;
+}
+.herb-head{
+  display:flex; align-items:flex-start; gap:16px; padding:22px 24px;
+}
+.herb-art{
+  width:52px; height:52px; border-radius:10px; flex-shrink:0;
+  background:rgba(47,93,69,0.08); display:flex; align-items:center; justify-content:center;
+}
+.herb-art svg{ width:32px; height:34px; }
+.herb-info{ flex:1; min-width:0; }
+.herb-name{ font-family:var(--display); font-size:21px; color:var(--ink); margin-bottom:8px; }
+.herb-benefits{ display:flex; flex-wrap:wrap; gap:7px; margin-bottom:4px; }
+.herb-benefit{
+  font-size:12px; font-weight:500; color:var(--bottle);
+  background:rgba(47,93,69,0.08); border-radius:20px; padding:4px 11px;
+}
+.herb-rank{
+  font-family:var(--display); font-size:15px; color:var(--stone); flex-shrink:0;
+}
+/* why expandable */
+.herb-why{ border-top:1px solid var(--line-soft); background:var(--paper-dim); }
+.herb-why-toggle{
+  width:100%; display:flex; align-items:center; justify-content:space-between;
+  padding:14px 24px; font-family:var(--mono); font-size:11px; font-weight:600; letter-spacing:0.05em; text-transform:uppercase;
+  color:var(--bottle);
+}
+.herb-why-toggle .chev{ transition:transform 0.25s; }
+.herb-why.open .herb-why-toggle .chev{ transform:rotate(180deg); }
+.herb-why-content{ max-height:0; overflow:hidden; transition:max-height 0.35s ease; }
+.herb-why.open .herb-why-content{ max-height:600px; }
+.herb-why-inner{ padding:4px 24px 22px; }
+.why-list{ list-style:none; margin-bottom:18px; }
+.why-list li{ display:flex; align-items:flex-start; gap:10px; font-size:13.5px; line-height:1.5; padding:5px 0; opacity:0.85; }
+.why-list li::before{ content:''; flex-shrink:0; width:5px; height:5px; border-radius:50%; background:var(--bottle); margin-top:8px; }
+.score-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+.score-box{ border:1px solid var(--line-soft); border-radius:8px; padding:14px 14px; background:var(--paper); }
+.score-box .sb-label{ font-family:var(--mono); font-size:9.5px; letter-spacing:0.04em; text-transform:uppercase; color:var(--stone); margin-bottom:8px; }
+.score-box .sb-num{ font-family:var(--display); font-size:22px; font-weight:500; color:var(--ink); }
+.score-box .sb-num small{ font-size:13px; opacity:0.5; }
+.score-box .sb-bar{ height:4px; border-radius:2px; background:var(--paper-dim); margin-top:8px; overflow:hidden; }
+.score-box .sb-bar i{ display:block; height:100%; border-radius:2px; }
+.sb-bar.evi i{ background:var(--amber); }
+.sb-bar.com i{ background:var(--bottle); }
+.sb-bar.tra i{ background:var(--stone); }
+@media (max-width:560px){ .score-grid{ grid-template-columns:1fr; gap:8px; } }
+/* products */
+.product-card{
+  border:1px solid var(--line); border-radius:10px; padding:20px 22px; background:var(--paper); margin-bottom:12px;
+}
+.product-top{ display:flex; justify-content:space-between; align-items:flex-start; gap:14px; margin-bottom:14px; flex-wrap:wrap; }
+.product-name{ font-weight:600; font-size:15.5px; color:var(--ink); }
+.product-for{ font-family:var(--mono); font-size:10.5px; color:var(--stone); margin-top:3px; letter-spacing:0.02em; }
+.quality-pill{
+  display:inline-flex; align-items:center; gap:7px; flex-shrink:0;
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  background:rgba(47,93,69,0.08); color:var(--bottle); border-radius:20px; padding:5px 12px;
+}
+.product-attrs{ display:grid; grid-template-columns:1fr 1fr; gap:10px 20px; }
+.product-attr{ display:flex; align-items:flex-start; gap:9px; font-size:13px; line-height:1.45; }
+.product-attr .pa-ic{ flex-shrink:0; width:16px; height:16px; color:var(--bottle); margin-top:2px; }
+.product-attr.warn .pa-ic{ color:var(--amber); }
+.product-attr span{ opacity:0.82; }
+@media (max-width:560px){ .product-attrs{ grid-template-columns:1fr; } }
+/* compare table */
+.compare-wrap{ border:1px solid var(--line); border-radius:10px; overflow:hidden; margin-top:6px; }
+.compare-row{ display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; border-bottom:1px solid var(--line-soft); }
+.compare-row:last-child{ border-bottom:none; }
+.compare-row.head{ background:var(--ink); color:var(--paper); }
+.compare-cell{ padding:13px 14px; font-size:12.5px; }
+.compare-row.head .compare-cell{ font-family:var(--mono); font-size:10px; letter-spacing:0.04em; text-transform:uppercase; opacity:0.85; }
+.compare-cell.metric{ font-weight:600; color:var(--ink); }
+.compare-cell .best{ color:var(--bottle); font-weight:600; }
+/* expert booking */
+.expert-card{
+  border:1px solid var(--line); border-radius:10px; overflow:hidden;
+  background:radial-gradient(circle at 90% 10%, rgba(201,123,74,0.08) 0%, transparent 50%), var(--paper);
+}
+.expert-top{ display:flex; gap:14px; align-items:flex-start; padding:22px 24px 18px; }
+.expert-ic{
+  width:38px; height:38px; border-radius:10px; flex-shrink:0;
+  background:var(--bottle); color:var(--paper); display:flex; align-items:center; justify-content:center;
+}
+.expert-ic svg{ width:20px; height:20px; }
+.expert-title{ font-family:var(--display); font-size:20px; color:var(--ink); margin-bottom:5px; }
+.expert-text{ font-size:14px; opacity:0.78; line-height:1.55; }
+.expert-options{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; padding:4px 24px 24px; }
+.expert-opt{
+  border:1px solid var(--line); border-radius:8px; padding:16px 16px; background:var(--paper); text-align:left;
+  transition:border-color 0.15s, transform 0.12s, background 0.15s;
+}
+.expert-opt:hover{ border-color:var(--bottle); transform:translateY(-2px); background:rgba(47,93,69,0.04); }
+.expert-opt-dur{ font-family:var(--mono); font-size:10.5px; color:var(--bottle); letter-spacing:0.03em; margin-bottom:7px; }
+.expert-opt-name{ font-weight:600; font-size:14px; color:var(--ink); line-height:1.35; }
+@media (max-width:640px){ .expert-options{ grid-template-columns:1fr; } }
+/* follow up */
+.followup-card{
+  border:1px dashed var(--line); border-radius:10px; padding:22px 24px; background:var(--paper-dim);
+}
+.followup-when{ font-family:var(--mono); font-size:10.5px; letter-spacing:0.05em; text-transform:uppercase; color:var(--stone); margin-bottom:10px; }
+.followup-q{ font-family:var(--display); font-size:18px; color:var(--ink); margin-bottom:16px; }
+.followup-opts{ display:flex; flex-wrap:wrap; gap:10px; }
+.followup-opt{
+  border:1px solid var(--line); border-radius:20px; padding:9px 16px; font-size:13px; font-weight:500; color:var(--ink); background:var(--paper);
+  transition:border-color 0.15s, background 0.15s;
+}
+.followup-opt:hover{ border-color:var(--bottle); background:rgba(47,93,69,0.05); }
+.followup-note{ font-size:13px; opacity:0.7; margin-top:14px; line-height:1.5; }
+/* results disclaimer + actions */
+.res-disclaimer{
+  display:flex; gap:12px; align-items:flex-start;
+  margin-top:30px; padding:16px 18px; border-radius:8px;
+  background:rgba(201,123,74,0.07); border:1px solid rgba(201,123,74,0.25);
+  font-size:13px; line-height:1.55;
+}
+.res-disclaimer svg{ width:18px; height:18px; flex-shrink:0; color:var(--amber); margin-top:1px; }
+.res-actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:26px; }
+.res-restart{
+  border:1px solid var(--line); color:var(--ink); padding:13px 22px; border-radius:6px; font-size:14px; font-weight:600;
+  display:inline-flex; align-items:center; gap:8px; transition:border-color 0.15s, background 0.15s;
+}
+.res-restart:hover{ border-color:var(--bottle); background:rgba(47,93,69,0.04); }
+</style>
+</head>
+<body>
+<div class="paper-texture"></div>
+<div class="noise"></div>
+<!-- ============ NAV ============ -->
+<header>
+  <nav>
+    <div class="logo-mark">
+      <svg viewBox="0 0 32 32" fill="none">
+        <path d="M16 28C16 28 6 22 6 13C6 7.5 10.5 4 16 4C21.5 4 26 7.5 26 13C26 22 16 28 16 28Z" stroke="#2F5D45" stroke-width="1.6"/>
+        <path d="M16 28V11" stroke="#2F5D45" stroke-width="1.6"/>
+        <path d="M16 16C16 16 11 14.5 11 10.5" stroke="#2F5D45" stroke-width="1.3"/>
+        <path d="M16 19C16 19 21 17.5 21 13.5" stroke="#2F5D45" stroke-width="1.3"/>
+      </svg>
+      <span class="logo-word">Blumiin</span>
+    </div>
+    <div class="nav-links">
+      <a href="#finder">Find your remedy</a>
+      <a href="#pillars">Evidence</a>
+      <a href="#journal">Your Journal</a>
+      <a href="#safety">Safety</a>
+      <a href="#finder" class="nav-cta" data-open-wizard>Find what's right for me →</a>
+    </div>
+  </nav>
+</header>
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <div class="hero-grid">
+    <div>
+      <div class="hero-eyebrow reveal">The credible middle ground</div>
+      <h1 class="reveal">Find the herb that's<br><em>right for you.</em></h1>
+      <p class="hero-sub reveal">
+        Answer six quick questions and tell us your story. Blumiin's Insight Engine builds
+        your personal wellness profile, then matches you to remedies — graded by evidence,
+        honored by tradition, and screened for your safety.
+      </p>
+      <div class="hero-actions reveal">
+        <a href="#finder" class="btn-primary" data-open-wizard>Find what's right for me <span>→</span></a>
+        <a href="#pillars" class="btn-secondary">See how tagging works</a>
+      </div>
+      <div class="hero-tags reveal">
+        <span class="tag t1">T1 · Traditional<span class="tag-tip">Documented in folk medicine and cultural practice across generations.</span></span>
+        <span class="tag t2">T2 · Preliminary<span class="tag-tip">Animal studies, small human trials, or ethnobotanical research exist.</span></span>
+        <span class="tag t3">T3 · Clinical<span class="tag-tip">Backed by peer-reviewed RCTs or systematic reviews.</span></span>
+      </div>
+    </div>
+    <div class="specimen reveal">
+      <div class="specimen-header">
+        <span class="specimen-num">SPECIMEN NO. 0214</span>
+        <span class="specimen-num">FAM. SOLANACEAE</span>
+      </div>
+      <div class="specimen-art">
+        <svg viewBox="0 0 200 220" fill="none">
+          <path d="M100 210V70" stroke="#14231C" stroke-width="1.4"/>
+          <path d="M100 90C100 90 70 80 62 50C62 50 95 48 100 90Z" stroke="#14231C" stroke-width="1.2" fill="rgba(47,93,69,0.06)"/>
+          <path d="M100 110C100 110 130 100 138 70C138 70 105 68 100 110Z" stroke="#14231C" stroke-width="1.2" fill="rgba(47,93,69,0.06)"/>
+          <path d="M100 130C100 130 72 122 65 96C65 96 96 94 100 130Z" stroke="#14231C" stroke-width="1.2" fill="rgba(47,93,69,0.06)"/>
+          <path d="M100 70C100 70 95 40 110 22C110 22 122 50 100 70Z" stroke="#14231C" stroke-width="1.2" fill="rgba(201,123,74,0.1)"/>
+          <circle cx="111" cy="28" r="3.2" fill="#C97B4A"/>
+          <circle cx="100" cy="70" r="2.4" fill="#2F5D45"/>
+        </svg>
+      </div>
+      <div class="specimen-name">Ashwagandha</div>
+      <div class="specimen-latin">Withania somnifera</div>
+      <div class="specimen-foot">
+        <span class="tag t2">T2 · Sleep, stress</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ============ TRUST STRIP ============ -->
+<div class="trust-strip">
+  <div class="trust-row">
+    <div class="trust-item"><span class="dot"></span>Herbalist + academic advisory board</div>
+    <div class="trust-item"><span class="dot"></span>Published editorial methodology</div>
+    <div class="trust-item"><span class="dot"></span>Drug–herb interaction screening</div>
+    <div class="trust-item"><span class="dot"></span>Every claim sourced, no exceptions</div>
+  </div>
+</div>
+<!-- ============ FIND WHAT'S RIGHT FOR ME (MAIN FEATURE) ============ -->
+<section class="finder" id="finder">
+  <div class="wrap">
+    <div class="section-head center reveal" style="margin-bottom:48px;">
+      <div class="eyebrow">The main event</div>
+      <h2>Find what's right for me.</h2>
+      <p class="section-lede" style="margin:0 auto;">Most herbal advice is generic. This isn't. A two-minute personalized assessment, an honest profile of where you stand, and remedies matched to <em>you</em> — your goal, your experience, your medications.</p>
+    </div>
+    <div class="finder-panel reveal">
+      <div class="finder-copy">
+        <div class="finder-kicker">Personalized assessment</div>
+        <div class="finder-title">Six questions.<br>One <em>honest</em> recommendation.</div>
+        <p class="finder-lede">Tell Blumiin what you're trying to improve and a little about your situation. The Insight Engine does the rest — no guesswork, no influencer hype.</p>
+        <div class="finder-mini">
+          <div class="finder-mini-item"><span class="mnum">1</span><span><strong>Quick assessment.</strong> Six multiple-choice questions about your goal, severity, and experience.</span></div>
+          <div class="finder-mini-item"><span class="mnum">2</span><span><strong>Your story, in your words.</strong> Add context so recommendations fit your life.</span></div>
+          <div class="finder-mini-item"><span class="mnum">3</span><span><strong>Matched remedies + why.</strong> Graded herbs, product picks, and expert guidance — with the reasoning shown.</span></div>
+        </div>
+        <button class="btn-finder" data-open-wizard>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+          Start my assessment
+        </button>
+        <div class="finder-note">Free · ~2 minutes · No account needed to see results</div>
+      </div>
+      <div class="finder-visual">
+        <div class="fv-tag">Your match — preview</div>
+        <div class="fv-card">
+          <div class="fv-card-top">
+            <span class="fv-card-name">Ashwagandha</span>
+            <span class="fv-meta">RANK 01</span>
+          </div>
+          <div class="fv-scores">
+            <div class="fv-score"><div class="fv-score-label">Evidence</div><div class="fv-score-num">8.7</div><div class="fv-bar"><i style="width:87%"></i></div></div>
+            <div class="fv-score"><div class="fv-score-label">Community</div><div class="fv-score-num">9.1</div><div class="fv-bar"><i style="width:91%"></i></div></div>
+            <div class="fv-score"><div class="fv-score-label">Tradition</div><div class="fv-score-num">9.5</div><div class="fv-bar"><i style="width:95%"></i></div></div>
+          </div>
+        </div>
+        <div class="fv-card">
+          <div class="fv-card-top">
+            <span class="fv-card-name">Chamomile</span>
+            <span class="fv-meta">RANK 02</span>
+          </div>
+          <div class="fv-scores">
+            <div class="fv-score"><div class="fv-score-label">Evidence</div><div class="fv-score-num">8.2</div><div class="fv-bar"><i style="width:82%"></i></div></div>
+            <div class="fv-score"><div class="fv-score-label">Community</div><div class="fv-score-num">9.0</div><div class="fv-bar"><i style="width:90%"></i></div></div>
+            <div class="fv-score"><div class="fv-score-label">Tradition</div><div class="fv-score-num">9.3</div><div class="fv-bar"><i style="width:93%"></i></div></div>
+          </div>
+        </div>
+        <div class="fv-meta" style="opacity:0.5;">↳ Your real results adapt to your answers.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ SITUATION ============ -->
+<section class="situation">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Why Blumiin exists</div>
+      <h2>Herbal wellness is high-interest and low-trust — at the same time.</h2>
+      <p class="section-lede">You want a natural alternative. What you find is one of two extremes, and neither one earns your trust.</p>
+    </div>
+    <div class="spectrum reveal">
+      <div class="spectrum-col">
+        <div class="spec-label">Extreme A</div>
+        <div class="spec-title">Too anecdotal</div>
+        <div class="spec-desc">High noise, zero accountability. Everyone's an expert; no one cites a source.</div>
+        <div class="spec-sources">Reddit threads<br>TikTok wellness<br>Facebook groups</div>
+        <div class="spec-arrow">→</div>
+      </div>
+      <div class="spectrum-col mid">
+        <div class="spec-label">Blumiin's white space</div>
+        <div class="spec-title">The credible middle</div>
+        <div class="spec-desc">Traditional knowledge respected, not dismissed — and tagged against the science that actually exists.</div>
+        <div class="spec-sources">Tier-tagged remedies<br>Advisory-reviewed<br>Plain-language, sourced</div>
+        <div class="spec-arrow">→</div>
+      </div>
+      <div class="spectrum-col">
+        <div class="spec-label">Extreme B</div>
+        <div class="spec-title">Too clinical</div>
+        <div class="spec-desc">Accurate, but built for clinicians. No cultural context, no plain language, no warmth.</div>
+        <div class="spec-sources">PubMed abstracts<br>WebMD disclaimers<br>Journal paywalls</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ PILLARS ============ -->
+<section class="pillars" id="pillars">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Three strategic pillars</div>
+      <h2>The moat is structural, not marketing.</h2>
+      <p class="section-lede">None of this can be copied by an influencer, a subreddit, or a chatbot with no editorial standard.</p>
+    </div>
+    <!-- PILLAR 1 -->
+    <div class="pillar reveal">
+      <div class="pillar-sticky">
+        <div class="pillar-num">Pillar 01</div>
+        <div class="pillar-label">Trust foundation</div>
+        <div class="pillar-title">Evidence architecture</div>
+        <p class="pillar-desc">
+          Every remedy on Blumiin is tagged against a three-tier evidence taxonomy before it's published.
+          Skeptics trust the transparency. Believers see tradition respected, not dismissed. Nobody else
+          is doing the categorization work — it's the thing a Reddit moderator simply cannot replicate.
+        </p>
+      </div>
+      <div>
+        <div class="tier-table">
+          <div class="tier-row head">
+            <div class="tier-cell">Tier</div>
+            <div class="tier-cell">Label</div>
+            <div class="tier-cell">What it means</div>
+          </div>
+          <div class="tier-row">
+            <div class="tier-cell"><span class="tag t1">T1</span></div>
+            <div class="tier-cell label">Traditional Use</div>
+            <div class="tier-cell desc">Documented in folk medicine and cultural practice across generations.</div>
+          </div>
+          <div class="tier-row">
+            <div class="tier-cell"><span class="tag t2">T2</span></div>
+            <div class="tier-cell label">Preliminary Evidence</div>
+            <div class="tier-cell desc">Animal studies, small human trials, or ethnobotanical research.</div>
+          </div>
+          <div class="tier-row">
+            <div class="tier-cell"><span class="tag t3">T3</span></div>
+            <div class="tier-cell label">Clinical Support</div>
+            <div class="tier-cell desc">Peer-reviewed RCTs and systematic reviews.</div>
+          </div>
+        </div>
+        <div class="remedy-demo">
+          <div class="remedy-demo-head">
+            <span class="remedy-name">Turmeric — for joint discomfort</span>
+          </div>
+          <div class="remedy-claims">
+            <div class="remedy-claim"><span class="tag t1">T1</span><span>Used across South Asian and Middle Eastern traditional medicine for centuries.</span></div>
+            <div class="remedy-claim"><span class="tag t2">T2</span><span>Curcumin shows anti-inflammatory activity in animal and small cohort studies.</span></div>
+            <div class="remedy-claim"><span class="tag t3">T3</span><span>Several RCTs support modest benefit for osteoarthritis pain at high bioavailable doses.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- PILLAR 2 -->
+    <div class="pillar reveal" id="journal">
+      <div class="pillar-sticky">
+        <div class="pillar-num">Pillar 02</div>
+        <div class="pillar-label">Retention mechanism</div>
+        <div class="pillar-title">Your personal remedy journal</div>
+        <p class="pillar-desc">
+          A 5-question intake on goals, conditions, medications, and experience unlocks
+          personalization from session one. Log what you try, and Blumiin surfaces the
+          patterns — including how people with a profile like yours actually responded.
+          This is structured data Reddit was never built to collect.
+        </p>
+      </div>
+      <div>
+        <div class="journal-mock">
+          <div class="journal-top">
+            <span>YOUR JOURNAL</span>
+            <span>WEEK 3</span>
+          </div>
+          <div class="journal-body">
+            <div class="journal-row">
+              <div class="jicon">🌙</div>
+              <div><strong>Ashwagandha</strong> · 600mg, evening</div>
+            </div>
+            <div class="journal-row">
+              <div class="jicon">📈</div>
+              <div>Sleep quality logged: <strong>improving</strong></div>
+            </div>
+            <div class="journal-row">
+              <div class="jicon">💊</div>
+              <div>Checked against your <strong>current medications</strong>: clear</div>
+            </div>
+            <div class="journal-stat">
+              <div class="journal-stat-num">71%</div>
+              <div class="journal-stat-text">of 847 users with a similar profile reported improved sleep after 3 weeks on ashwagandha.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- PILLAR 3 -->
+    <div class="pillar reveal" id="safety">
+      <div class="pillar-sticky">
+        <div class="pillar-num">Pillar 03</div>
+        <div class="pillar-label">The unchallengeable claim</div>
+        <div class="pillar-title">Safety is a product feature</div>
+        <p class="pillar-desc">
+          Not a disclaimer buried in fine print — a flag that appears exactly when it matters.
+          Drug–herb interactions, contraindications for pregnancy or pre-surgery, dosage
+          guardrails with sourcing. When Blumiin catches something your TikTok feed wouldn't,
+          that's the moment you bookmark it.
+        </p>
+      </div>
+      <div>
+        <div class="safety-mock">
+          <div class="safety-alert">
+            <div class="aicon">!</div>
+            <div>
+              <div class="safety-alert-title">Moderate interaction flagged</div>
+              <div class="safety-alert-text">St. John's Wort can reduce the effectiveness of SSRIs and other serotonergic medications. Logged because you listed an SSRI in your intake.</div>
+            </div>
+          </div>
+          <div class="safety-list">
+            <div class="safety-item"><span class="sdot warn"></span>Not recommended in pregnancy or while breastfeeding</div>
+            <div class="safety-item"><span class="sdot warn"></span>Pause 2 weeks before any scheduled surgery</div>
+            <div class="safety-item"><span class="sdot ok"></span>Dosage guardrail: 300mg standardized extract, 2–3x daily</div>
+            <div class="safety-item"><span class="sdot ok"></span>Sourced from: Cochrane Review, 2017</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ TRUST CONCEPTS ============ -->
+<section class="trust-section">
+  <div class="wrap">
+    <div class="section-head center reveal">
+      <div class="eyebrow">Trust-building, by design</div>
+      <h2>Scientific rigor, without losing the plot.</h2>
+      <p class="section-lede" style="margin:0 auto;">Every concept on Blumiin exists to make one thing visible: exactly how much you should trust what you're reading.</p>
+    </div>
+    <div class="trust-grid reveal">
+      <div class="trust-card">
+        <svg class="trust-card-icon" viewBox="0 0 42 42" fill="none">
+          <rect x="6" y="6" width="30" height="30" rx="3" stroke="#2F5D45" stroke-width="1.4"/>
+          <path d="M13 16h16M13 21h16M13 26h10" stroke="#2F5D45" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <div class="trust-card-title">Published methodology</div>
+        <div class="trust-card-desc">Our tagging standards are public, not a black box. You can read exactly how a remedy earns T1, T2, or T3 before you ever read the remedy itself.</div>
+      </div>
+      <div class="trust-card">
+        <svg class="trust-card-icon" viewBox="0 0 42 42" fill="none">
+          <circle cx="21" cy="16" r="7" stroke="#2F5D45" stroke-width="1.4"/>
+          <path d="M9 36c0-8 5-13 12-13s12 5 12 13" stroke="#2F5D45" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        <div class="trust-card-title">Herbalist + academic board</div>
+        <div class="trust-card-desc">No need for a full clinical team on day one. What matters is editorial standards reviewed by people with real domain expertise on both sides — folk and clinical.</div>
+      </div>
+      <div class="trust-card">
+        <svg class="trust-card-icon" viewBox="0 0 42 42" fill="none">
+          <path d="M21 6L36 13V21C36 30 29.5 35 21 38C12.5 35 6 30 6 21V13L21 6Z" stroke="#2F5D45" stroke-width="1.4"/>
+          <path d="M15 21l4.5 4.5L28 16" stroke="#2F5D45" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="trust-card-title">Honest about limits</div>
+        <div class="trust-card-desc">"Talk to your provider" triggers aren't legal boilerplate. They show up because being upfront about what we don't know is what makes the rest of the site credible.</div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ SOURCING / STORYTELLING ============ -->
+<section class="sourcing" id="sourcing">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="eyebrow">Where it comes from</div>
+      <h2>Every remedy has an origin. We tell you whose it is.</h2>
+      <p class="section-lede">Sourcing isn't a footnote — it's the story. Behind every tag is a place, a practice, and the people who kept it alive.</p>
+    </div>
+    <div class="origin-cards reveal">
+      <div class="origin-card">
+        <div class="origin-art">
+          <svg viewBox="0 0 100 100" fill="none">
+            <path d="M50 90V30" stroke="#FAF7F0" stroke-width="1.3" opacity="0.9"/>
+            <path d="M50 40c0 0-22-4-26-22 0 0 28 0 26 22z" stroke="#9FD4B4" stroke-width="1.2" opacity="0.85"/>
+            <path d="M50 52c0 0 22-4 26-22 0 0-28 0-26 22z" stroke="#9FD4B4" stroke-width="1.2" opacity="0.85"/>
+          </svg>
+        </div>
+        <div class="origin-body">
+          <div class="origin-loc">Rajasthan, India</div>
+          <div class="origin-title">Ashwagandha</div>
+          <div class="origin-desc">Grown by a third-generation farming cooperative practicing rain-fed cultivation, a method documented in Ayurvedic texts for over 3,000 years.</div>
+          <div class="origin-meta"><span>12 grower families</span><span>T2 tagged</span></div>
+        </div>
+      </div>
+      <div class="origin-card">
+        <div class="origin-art">
+          <svg viewBox="0 0 100 100" fill="none">
+            <ellipse cx="50" cy="55" rx="22" ry="28" stroke="#9FD4B4" stroke-width="1.2" opacity="0.85"/>
+            <path d="M50 27v56" stroke="#FAF7F0" stroke-width="1.1" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="origin-body">
+          <div class="origin-loc">Kerala, India</div>
+          <div class="origin-title">Turmeric</div>
+          <div class="origin-desc">Hand-harvested at peak curcumin density by farmers using a soil rotation method passed down within the same family plots since the 1950s.</div>
+          <div class="origin-meta"><span>4 partner farms</span><span>T3 tagged</span></div>
+        </div>
+      </div>
+      <div class="origin-card">
+        <div class="origin-art">
+          <svg viewBox="0 0 100 100" fill="none">
+            <path d="M50 85V35" stroke="#FAF7F0" stroke-width="1.2" opacity="0.85"/>
+            <circle cx="50" cy="28" r="9" stroke="#9FD4B4" stroke-width="1.2" opacity="0.85"/>
+            <path d="M38 50c4-6 8-6 12-3M62 60c-4-6-8-6-12-3" stroke="#9FD4B4" stroke-width="1" opacity="0.7"/>
+          </svg>
+        </div>
+        <div class="origin-body">
+          <div class="origin-loc">Bavaria, Germany</div>
+          <div class="origin-title">St. John's Wort</div>
+          <div class="origin-desc">Wild-foraged under EU traceability standards by a cooperative that's logged harvest sites and yields for over 40 years.</div>
+          <div class="origin-meta"><span>Wild-foraged</span><span>T3 tagged</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<!-- ============ CTA ============ -->
+<section class="cta-section">
+  <div class="wrap reveal">
+    <h2>Read the tag before you read the testimonial.</h2>
+    <p class="section-lede">Two minutes to a recommendation built around you — your goal, your experience, your safety.</p>
+    <button class="btn-primary" data-open-wizard>Find what's right for me <span>→</span></button>
+  </div>
+</section>
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="logo-mark">
+          <svg viewBox="0 0 32 32" fill="none">
+            <path d="M16 28C16 28 6 22 6 13C6 7.5 10.5 4 16 4C21.5 4 26 7.5 26 13C26 22 16 28 16 28Z" stroke="#FAF7F0" stroke-width="1.6"/>
+            <path d="M16 28V11" stroke="#FAF7F0" stroke-width="1.6"/>
+          </svg>
+          <span class="logo-word">Blumiin</span>
+        </div>
+        <p class="footer-tagline">The credible middle ground between folk wisdom and clinical proof — tagged, sourced, and honest about what it doesn't know.</p>
+      </div>
+      <div class="footer-cols">
+        <div class="footer-col">
+          <div class="footer-col-title">Platform</div>
+          <a href="#finder" data-open-wizard>Find what's right for me</a>
+          <a href="#pillars">Evidence tiers</a>
+          <a href="#journal">Your journal</a>
+          <a href="#safety">Safety screening</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Company</div>
+          <a href="#sourcing">Sourcing stories</a>
+          <a href="#">Advisory board</a>
+          <a href="#">Methodology</a>
+        </div>
+        <div class="footer-col">
+          <div class="footer-col-title">Support</div>
+          <a href="#">Talk to your provider</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Blumiin. Not a substitute for medical advice.</span>
+      <span>Tagged for transparency, not for clicks.</span>
+    </div>
+  </div>
+</footer>
+
+<!-- ============ WIZARD OVERLAY ============ -->
+<div class="wiz-overlay" id="wizOverlay" role="dialog" aria-modal="true" aria-label="Find what's right for me assessment">
+  <div class="wiz" id="wiz">
+    <div class="wiz-head">
+      <div class="logo-mark">
+        <svg viewBox="0 0 32 32" fill="none">
+          <path d="M16 28C16 28 6 22 6 13C6 7.5 10.5 4 16 4C21.5 4 26 7.5 26 13C26 22 16 28 16 28Z" stroke="#2F5D45" stroke-width="1.6"/>
+          <path d="M16 28V11" stroke="#2F5D45" stroke-width="1.6"/>
+        </svg>
+        <span class="logo-word">Blumiin</span>
+      </div>
+      <div class="wiz-progress-wrap" id="wizProgressWrap">
+        <div class="wiz-progress-meta"><span id="wizStepName">Step 1 of 7</span><span id="wizPct">0%</span></div>
+        <div class="wiz-progress"><i id="wizProgressBar"></i></div>
+      </div>
+      <button class="wiz-close" id="wizClose" aria-label="Close assessment">✕</button>
+    </div>
+    <div class="wiz-body" id="wizBody"><!-- steps injected by JS --></div>
+    <div class="wiz-foot" id="wizFoot">
+      <button class="wiz-back" id="wizBack">← Back</button>
+      <button class="wiz-next" id="wizNext" disabled>Continue <span>→</span></button>
+    </div>
+  </div>
+</div>
+
+<script>
+  /* ===== Scroll reveal ===== */
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+  }, { threshold:0.12, rootMargin:'0px 0px -40px 0px' });
+  revealEls.forEach(el=>io.observe(el));
+
+  /* ===== Tag tooltip keyboard access ===== */
+  document.querySelectorAll('.tag').forEach(tag=>{ if(!tag.hasAttribute('tabindex')) tag.setAttribute('tabindex','0'); });
+</script>
+<script>
+/* =====================================================================
+   Blumiin — "Find What's Right For Me" assessment wizard
+   Pure client logic. The herb data here is NOT secret (it's reference
+   content). The personalized narrative is generated by the Groq-backed
+   /api/insight endpoint, with a local fallback if that call fails.
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  /* ---------- shared botanical sprig art for herb cards ---------- */
+  var SPRIG = '<svg viewBox="0 0 32 34" fill="none"><path d="M16 32V8" stroke="#2F5D45" stroke-width="1.4"/>' +
+    '<path d="M16 16c0 0-7-1.5-8.5-7 0 0 9 0 8.5 7z" stroke="#2F5D45" stroke-width="1.1" fill="rgba(47,93,69,0.08)"/>' +
+    '<path d="M16 21c0 0 7-1.5 8.5-7 0 0-9 0-8.5 7z" stroke="#2F5D45" stroke-width="1.1" fill="rgba(47,93,69,0.08)"/>' +
+    '<path d="M16 8c0 0-1.5-4 2-6 0 0 2.5 4-2 6z" stroke="#C97B4A" stroke-width="1.1" fill="rgba(201,123,74,0.12)"/></svg>';
+
+  /* ---------- helper: tier label ---------- */
+  function tierLabel(t) {
+    return t === 't3' ? 'T3 · Clinical' : (t === 't2' ? 'T2 · Preliminary' : 'T1 · Traditional');
+  }
+
+  /* ---------- the questions ---------- */
+  var QUESTIONS = [
+    {
+      key: 'goal', label: 'Question 1 of 6',
+      title: 'What are you looking to improve?',
+      sub: 'Pick the one that matters most right now. You can explore others later.',
+      options: [
+        { v: 'sleep', l: 'Better sleep' },
+        { v: 'stress', l: 'Stress & anxiety' },
+        { v: 'energy', l: 'Energy & focus' },
+        { v: 'digestion', l: 'Digestion' },
+        { v: 'immunity', l: 'Immunity' },
+        { v: 'womens', l: "Women's health" },
+        { v: 'skin', l: 'Skin & hair' },
+        { v: 'pain', l: 'Pain & inflammation' },
+        { v: 'weight', l: 'Weight management' },
+        { v: 'other', l: 'Other' }
+      ]
+    },
+    {
+      key: 'severity', label: 'Question 2 of 6',
+      title: 'How severe is your concern?',
+      sub: 'This helps us calibrate how cautious our guidance should be.',
+      options: [
+        { v: 'exploring', l: 'Just exploring' },
+        { v: 'mild', l: 'Mild' },
+        { v: 'moderate', l: 'Moderate' },
+        { v: 'significant', l: 'Significant' }
+      ]
+    },
+    {
+      key: 'duration', label: 'Question 3 of 6',
+      title: 'How long have you experienced this?',
+      sub: 'Duration shapes whether a gentle remedy or a provider conversation fits best.',
+      options: [
+        { v: 'lt1w', l: 'Less than a week' },
+        { v: '1to4w', l: '1–4 weeks' },
+        { v: '1to6m', l: '1–6 months' },
+        { v: 'gt6m', l: 'More than 6 months' }
+      ]
+    },
+    {
+      key: 'approach', label: 'Question 4 of 6',
+      title: 'What approach do you prefer?',
+      sub: 'We rank your matches differently depending on what you trust most.',
+      options: [
+        { v: 'science', l: 'Scientific evidence only' },
+        { v: 'tradition', l: 'Traditional remedies' },
+        { v: 'community', l: 'Community recommendations' },
+        { v: 'combo', l: 'Combination of all' }
+      ]
+    },
+    {
+      key: 'experience', label: 'Question 5 of 6',
+      title: 'Have you tried herbal remedies before?',
+      sub: 'We calibrate how much we explain based on your experience.',
+      options: [
+        { v: 'never', l: 'Never' },
+        { v: 'few', l: 'A few times' },
+        { v: 'regular', l: 'Regularly' }
+      ]
+    },
+    {
+      key: 'meds', label: 'Question 6 of 6',
+      title: 'Are you currently taking medications?',
+      sub: 'Critical for safety — this powers our herb–drug interaction screening.',
+      options: [
+        { v: 'yes', l: 'Yes' },
+        { v: 'no', l: 'No' },
+        { v: 'prefer', l: 'Prefer not to say' }
+      ]
+    }
+  ];
+
+  /* ---------- readable label lookups ---------- */
+  var GOAL_LABEL = {
+    sleep: 'Better Sleep', stress: 'Stress & Anxiety', energy: 'Energy & Focus',
+    digestion: 'Digestion', immunity: 'Immunity', womens: "Women's Health",
+    skin: 'Skin & Hair', pain: 'Pain & Inflammation', weight: 'Weight Management', other: 'General Wellness'
+  };
+  var SEVERITY_LABEL = { exploring: 'Just exploring', mild: 'Mild', moderate: 'Moderate', significant: 'Significant' };
+  var DURATION_LABEL = { lt1w: 'Less than a week', '1to4w': '1–4 weeks', '1to6m': '1–6 months', gt6m: 'More than 6 months' };
+  var APPROACH_LABEL = {
+    science: 'Scientific Evidence', tradition: 'Traditional Knowledge',
+    community: 'Community Experience', combo: 'Science + Tradition + Community'
+  };
+  var EXPERIENCE_LABEL = { never: 'Beginner', few: 'Intermediate', regular: 'Experienced' };
+  var SECONDARY_DEFAULT = {
+    sleep: 'Stress Management', stress: 'Sleep Quality', energy: 'Stress Management',
+    digestion: 'Stress Management', immunity: 'General Resilience', womens: 'Hormonal Balance',
+    skin: 'Inflammation', pain: 'Stress Management', weight: 'Energy & Metabolism', other: 'Overall Wellbeing'
+  };
+
+  /* ---------- herb knowledge base (reference content) ---------- */
+  // scores are 0–10 (one decimal). tier mirrors the site's T1/T2/T3 system.
+  function P(name, quality, dosage, safety, tested) {
+    return { name: name, quality: quality, dosage: dosage, safety: safety, tested: tested !== false };
+  }
+  function cmp(a, b, c) { return { a: a, b: b, c: c }; }
+
+  var HERBS = {
+    sleep: [
+      { name: 'Chamomile', latin: 'Matricaria chamomilla', tier: 't3',
+        benefits: ['Sleep support', 'Mild calming', 'Gentle & well-tolerated'],
+        evidence: 8.2, community: 9.0, tradition: 9.3,
+        why: ['Directly matches your goal of better sleep', 'Small clinical trials support modest improvement in sleep quality', 'One of the most popular and well-tolerated community recommendations'],
+        products: [P('Organic Chamomile Flower Extract', '93/100', '400–1600mg standardized, evening', 'Avoid with ragweed allergy; rare interaction with blood thinners')],
+        compare: { rows: [['Quality score', cmp('93/100', '88/100', '90/100')], ['Third-party tested', cmp('Yes', 'Yes', 'No')], ['Std. dosage', cmp('400mg', '350mg', '500mg')], ['Price / mo', cmp('$14', '$11', '$19')]] } },
+      { name: 'Valerian Root', latin: 'Valeriana officinalis', tier: 't2',
+        benefits: ['Sleep onset', 'Relaxation'],
+        evidence: 7.4, community: 8.1, tradition: 9.0,
+        why: ['Traditionally used to shorten the time it takes to fall asleep', 'Preliminary human trials show promise, though results are mixed', 'Frequently logged by the community for sleep-onset difficulty'],
+        products: [P('Valerian Root Extract', '90/100', '300–600mg, 30–60 min before bed', 'May cause grogginess; avoid combining with sedatives')],
+        compare: { rows: [['Quality score', cmp('90/100', '86/100', '84/100')], ['Third-party tested', cmp('Yes', 'No', 'Yes')], ['Std. dosage', cmp('450mg', '300mg', '500mg')], ['Price / mo', cmp('$16', '$12', '$15')]] } },
+      { name: 'Lemon Balm', latin: 'Melissa officinalis', tier: 't1',
+        benefits: ['Relaxation support', 'Eases restlessness'],
+        evidence: 6.8, community: 8.4, tradition: 9.1,
+        why: ['Traditionally used for relaxation, anxiety, and sleep', 'Pairs well with your interest in gentle, natural options', 'Often combined with valerian in community sleep routines'],
+        products: [P('Lemon Balm Leaf Extract', '89/100', '300–600mg, evening', 'Generally safe; caution with thyroid medication')] }
+    ],
+    stress: [
+      { name: 'Ashwagandha', latin: 'Withania somnifera', tier: 't3',
+        benefits: ['Stress reduction', 'Cortisol support', 'Used in Ayurveda'],
+        evidence: 8.7, community: 9.1, tradition: 9.5,
+        why: ['Matches your goal of reducing stress', 'Strong scientific evidence from multiple randomized trials on perceived stress and cortisol', 'Frequently recommended by both experts and the community'],
+        products: [P('Organic Ashwagandha Root Extract (KSM-66)', '95/100', '300–600mg standardized, daily', 'Consult a professional if on thyroid, sedative, or immunosuppressant medication; avoid in pregnancy')],
+        compare: { rows: [['Quality score', cmp('95/100', '89/100', '91/100')], ['Third-party tested', cmp('Yes', 'Yes', 'No')], ['Std. dosage', cmp('600mg', '500mg', '450mg')], ['Price / mo', cmp('$22', '$17', '$25')]] } },
+      { name: 'Lemon Balm', latin: 'Melissa officinalis', tier: 't2',
+        benefits: ['Calming', 'Eases anxiety'],
+        evidence: 6.9, community: 8.3, tradition: 9.0,
+        why: ['Traditionally used to ease anxiety and restlessness', 'Small studies suggest a calming effect on mood', 'A gentle option that fits a beginner-friendly routine'],
+        products: [P('Lemon Balm Leaf Extract', '89/100', '300–600mg, 1–2x daily', 'Generally safe; caution with thyroid medication')] },
+      { name: 'Rhodiola', latin: 'Rhodiola rosea', tier: 't2',
+        benefits: ['Stress resilience', 'Anti-fatigue'],
+        evidence: 7.6, community: 8.0, tradition: 8.6,
+        why: ['An adaptogen used for stress-related fatigue', 'Preliminary trials support reduced burnout symptoms', 'Best taken earlier in the day to avoid disrupting sleep'],
+        products: [P('Rhodiola Rosea Extract', '91/100', '200–400mg, morning', 'May be stimulating; avoid late in the day and in bipolar disorder')] }
+    ],
+    energy: [
+      { name: 'Rhodiola', latin: 'Rhodiola rosea', tier: 't3',
+        benefits: ['Anti-fatigue', 'Mental stamina', 'Adaptogen'],
+        evidence: 8.1, community: 8.4, tradition: 8.7,
+        why: ['Directly targets fatigue and mental stamina', 'Randomized trials support reduced fatigue and improved focus', 'A community favorite for sustainable energy without jitters'],
+        products: [P('Rhodiola Rosea Extract (3% rosavins)', '92/100', '200–400mg, morning', 'May be stimulating; avoid late in the day and in bipolar disorder')],
+        compare: { rows: [['Quality score', cmp('92/100', '88/100', '90/100')], ['Third-party tested', cmp('Yes', 'Yes', 'No')], ['Std. dosage', cmp('300mg', '250mg', '400mg')], ['Price / mo', cmp('$19', '$15', '$23')]] } },
+      { name: 'Panax Ginseng', latin: 'Panax ginseng', tier: 't2',
+        benefits: ['Energy', 'Cognitive support'],
+        evidence: 7.5, community: 8.0, tradition: 9.4,
+        why: ['Centuries of traditional use for vitality and energy', 'Preliminary evidence for reduced fatigue and improved cognition', 'Commonly cycled rather than taken continuously'],
+        products: [P('Korean Red Ginseng Extract', '90/100', '200–400mg, daytime', 'May raise blood pressure; interacts with blood thinners and diabetes meds')] },
+      { name: 'Bacopa', latin: 'Bacopa monnieri', tier: 't2',
+        benefits: ['Focus', 'Memory support'],
+        evidence: 7.2, community: 7.8, tradition: 9.0,
+        why: ['Traditionally used in Ayurveda for memory and focus', 'Small trials suggest benefits build over 8–12 weeks', 'Patience pays off — effects are cumulative, not immediate'],
+        products: [P('Bacopa Monnieri Extract (50% bacosides)', '89/100', '300mg, daily with food', 'May cause mild GI upset; take with a meal')] }
+    ],
+    digestion: [
+      { name: 'Peppermint', latin: 'Mentha piperita', tier: 't3',
+        benefits: ['IBS relief', 'Eases bloating', 'Antispasmodic'],
+        evidence: 8.5, community: 8.7, tradition: 9.2,
+        why: ['Strong fit for digestive discomfort and bloating', 'Enteric-coated peppermint oil is clinically supported for IBS symptoms', 'A long-standing, widely trusted remedy across cultures'],
+        products: [P('Enteric-Coated Peppermint Oil', '94/100', '0.2–0.4mL, 2–3x daily before meals', 'Avoid with severe reflux/GERD or hiatal hernia')],
+        compare: { rows: [['Quality score', cmp('94/100', '90/100', '88/100')], ['Third-party tested', cmp('Yes', 'Yes', 'No')], ['Enteric-coated', cmp('Yes', 'Yes', 'No')], ['Price / mo', cmp('$18', '$14', '$16')]] } },
+      { name: 'Ginger', latin: 'Zingiber officinale', tier: 't3',
+        benefits: ['Anti-nausea', 'Motility support'],
+        evidence: 8.3, community: 8.6, tradition: 9.4,
+        why: ['Well matched to nausea and sluggish digestion', 'Robust clinical evidence for nausea relief', 'One of the most universally used digestive remedies'],
+        products: [P('Ginger Root Extract', '92/100', '500–1000mg, daily', 'High doses may interact with blood thinners')] },
+      { name: 'Fennel', latin: 'Foeniculum vulgare', tier: 't1',
+        benefits: ['Eases gas', 'Soothes cramping'],
+        evidence: 6.5, community: 7.9, tradition: 9.0,
+        why: ['Traditionally used to relieve gas and cramping', 'Gentle and food-grade, fitting a cautious start', 'Often taken as a tea after meals'],
+        products: [P('Fennel Seed Extract', '87/100', '300–600mg after meals', 'Generally safe; avoid large therapeutic doses in pregnancy')] }
+    ],
+    immunity: [
+      { name: 'Elderberry', latin: 'Sambucus nigra', tier: 't2',
+        benefits: ['Immune support', 'Antioxidant'],
+        evidence: 7.7, community: 9.0, tradition: 9.1,
+        why: ['Popular for early immune and cold-season support', 'Small trials suggest shorter cold/flu duration', 'A top community pick during winter months'],
+        products: [P('Elderberry Extract Syrup', '92/100', '15mL or 600mg daily', 'Use cooked/standardized forms; raw berries are toxic')],
+        compare: { rows: [['Quality score', cmp('92/100', '89/100', '85/100')], ['Third-party tested', cmp('Yes', 'Yes', 'No')], ['Std. dosage', cmp('600mg', '500mg', '700mg')], ['Price / mo', cmp('$17', '$13', '$20')]] } },
+      { name: 'Echinacea', latin: 'Echinacea purpurea', tier: 't2',
+        benefits: ['Immune modulation', 'Cold-season use'],
+        evidence: 7.0, community: 8.2, tradition: 8.9,
+        why: ['Traditionally taken at the first sign of a cold', 'Evidence is mixed but leans toward modest benefit', 'Best used short-term, not continuously'],
+        products: [P('Echinacea Purpurea Extract', '89/100', '300–500mg, 2–3x daily short-term', 'Avoid with autoimmune conditions or immunosuppressants')] },
+      { name: 'Astragalus', latin: 'Astragalus membranaceus', tier: 't1',
+        benefits: ['Immune resilience', 'Adaptogen'],
+        evidence: 6.4, community: 7.6, tradition: 9.2,
+        why: ['A foundational immune tonic in Traditional Chinese Medicine', 'Used for long-term resilience rather than acute illness', 'Pairs your interest in tradition with everyday support'],
+        products: [P('Astragalus Root Extract', '88/100', '500–1000mg daily', 'Avoid with immunosuppressants and in acute infection')] }
+    ],
+    womens: [
+      { name: 'Chasteberry (Vitex)', latin: 'Vitex agnus-castus', tier: 't2',
+        benefits: ['Cycle balance', 'PMS support'],
+        evidence: 7.8, community: 8.5, tradition: 9.0,
+        why: ['Targeted to menstrual and PMS-related concerns', 'Preliminary trials support PMS symptom relief', 'Effects build over several cycles'],
+        products: [P('Chasteberry (Vitex) Extract', '91/100', '20–40mg daily, morning', 'Avoid with hormonal contraceptives and in pregnancy; consult a professional')],
+        compare: { rows: [['Quality score', cmp('91/100', '87/100', '89/100')], ['Third-party tested', cmp('Yes', 'Yes', 'No')], ['Std. dosage', cmp('40mg', '30mg', '20mg')], ['Price / mo', cmp('$18', '$15', '$21')]] } },
+      { name: 'Black Cohosh', latin: 'Actaea racemosa', tier: 't2',
+        benefits: ['Menopause support', 'Hot-flash relief'],
+        evidence: 7.1, community: 8.0, tradition: 8.8,
+        why: ['Commonly used for menopausal symptoms', 'Some trials support reduced hot flashes', 'Best used under guidance due to liver considerations'],
+        products: [P('Black Cohosh Root Extract', '88/100', '20–40mg, 1–2x daily', 'Monitor liver health; avoid in pregnancy and liver disease')] },
+      { name: 'Red Raspberry Leaf', latin: 'Rubus idaeus', tier: 't1',
+        benefits: ['Traditional tonic', 'Cycle support'],
+        evidence: 6.0, community: 7.8, tradition: 9.1,
+        why: ['A traditional uterine tonic used for generations', 'Gentle, food-grade option often taken as a tea', 'Limited clinical data — valued mainly for tradition'],
+        products: [P('Red Raspberry Leaf Extract', '86/100', '400–800mg daily', 'Discuss with a provider if pregnant')] }
+    ],
+    skin: [
+      { name: 'Gotu Kola', latin: 'Centella asiatica', tier: 't2',
+        benefits: ['Skin healing', 'Collagen support'],
+        evidence: 7.6, community: 8.3, tradition: 9.0,
+        why: ['Targets skin repair and elasticity', 'Studies support wound healing and collagen synthesis', 'A staple in both Ayurvedic and TCM skin care'],
+        products: [P('Gotu Kola Extract (Centella)', '90/100', '300–450mg daily', 'Generally safe; rare GI upset at high doses')],
+        compare: { rows: [['Quality score', cmp('90/100', '86/100', '88/100')], ['Third-party tested', cmp('Yes', 'Yes', 'No')], ['Std. dosage', cmp('450mg', '300mg', '400mg')], ['Price / mo', cmp('$17', '$14', '$19')]] } },
+      { name: 'Saw Palmetto', latin: 'Serenoa repens', tier: 't2',
+        benefits: ['Hair support', 'DHT balance'],
+        evidence: 7.0, community: 8.1, tradition: 8.4,
+        why: ['Used for hair thinning linked to DHT', 'Preliminary evidence for hair density support', 'A popular community pick for hair routines'],
+        products: [P('Saw Palmetto Extract', '88/100', '320mg daily', 'May affect hormone-sensitive conditions; consult a professional')] },
+      { name: 'Aloe Vera', latin: 'Aloe barbadensis', tier: 't1',
+        benefits: ['Soothing', 'Hydration'],
+        evidence: 6.6, community: 8.4, tradition: 9.2,
+        why: ['Long traditional use for soothing and hydrating skin', 'Best known topically, with gentle oral forms available', 'A familiar, low-risk place to start'],
+        products: [P('Aloe Vera (inner leaf)', '87/100', 'Topical or 50–100mg oral', 'Oral latex forms can be a laxative; use decolorized products')] }
+    ],
+    pain: [
+      { name: 'Turmeric (Curcumin)', latin: 'Curcuma longa', tier: 't3',
+        benefits: ['Anti-inflammatory', 'Joint comfort', 'Clinically studied'],
+        evidence: 8.6, community: 8.8, tradition: 9.5,
+        why: ['Directly matches inflammation and joint discomfort', 'Multiple RCTs support modest benefit for osteoarthritis pain', 'Centuries of traditional use across South Asia'],
+        products: [P('Curcumin Extract (with piperine)', '95/100', '500–1000mg standardized, daily', 'Interacts with blood thinners; use bioavailable forms')],
+        compare: { rows: [['Quality score', cmp('95/100', '90/100', '92/100')], ['Third-party tested', cmp('Yes', 'Yes', 'No')], ['Bioavailability boost', cmp('Piperine', 'Phytosome', 'None')], ['Price / mo', cmp('$21', '$18', '$16')]] } },
+      { name: 'Boswellia', latin: 'Boswellia serrata', tier: 't2',
+        benefits: ['Joint support', 'Anti-inflammatory'],
+        evidence: 7.7, community: 8.2, tradition: 9.0,
+        why: ['Targets joint inflammation specifically', 'Promising trials for osteoarthritis stiffness', 'Often paired with curcumin for synergy'],
+        products: [P('Boswellia Serrata Extract (65% acids)', '91/100', '300–500mg, 2–3x daily', 'May interact with blood thinners; mild GI effects')] },
+      { name: 'Ginger', latin: 'Zingiber officinale', tier: 't2',
+        benefits: ['Anti-inflammatory', 'Muscle soreness'],
+        evidence: 7.4, community: 8.3, tradition: 9.3,
+        why: ['Supports inflammation and exercise-related soreness', 'Evidence supports modest pain-reducing effects', 'A gentle, food-grade everyday option'],
+        products: [P('Ginger Root Extract', '90/100', '500–1000mg daily', 'High doses may interact with blood thinners')] }
+    ],
+    weight: [
+      { name: 'Green Tea Extract', latin: 'Camellia sinensis', tier: 't2',
+        benefits: ['Metabolism support', 'Antioxidant'],
+        evidence: 7.5, community: 8.2, tradition: 8.6,
+        why: ['Supports metabolism alongside diet and activity', 'Modest evidence for fat oxidation and weight support', 'Best as a complement to lifestyle change, not a substitute'],
+        products: [P('Green Tea Extract (EGCG)', '90/100', '250–500mg EGCG daily', 'High doses can stress the liver; avoid on empty stomach')],
+        compare: { rows: [['Quality score', cmp('90/100', '86/100', '88/100')], ['Third-party tested', cmp('Yes', 'Yes', 'No')], ['EGCG / dose', cmp('400mg', '300mg', '350mg')], ['Price / mo', cmp('$16', '$12', '$18')]] } },
+      { name: 'Fenugreek', latin: 'Trigonella foenum-graecum', tier: 't2',
+        benefits: ['Appetite support', 'Blood-sugar balance'],
+        evidence: 7.0, community: 7.8, tradition: 9.0,
+        why: ['May support appetite control and blood-sugar balance', 'Small trials show reduced appetite and intake', 'A traditional kitchen herb with a gentle profile'],
+        products: [P('Fenugreek Seed Extract', '88/100', '500–1000mg before meals', 'May affect blood sugar; monitor if diabetic')] },
+      { name: 'Cinnamon', latin: 'Cinnamomum verum', tier: 't1',
+        benefits: ['Blood-sugar support', 'Metabolic balance'],
+        evidence: 6.5, community: 7.7, tradition: 9.1,
+        why: ['Traditionally used to support blood-sugar balance', 'Use Ceylon cinnamon to limit coumarin exposure', 'A familiar, food-grade everyday addition'],
+        products: [P('Ceylon Cinnamon Extract', '86/100', '500mg–1g daily', 'Prefer Ceylon over cassia; high cassia doses affect the liver')] }
+    ],
+    other: [
+      { name: 'Ashwagandha', latin: 'Withania somnifera', tier: 't3',
+        benefits: ['Adaptogen', 'Stress & vitality', 'Used in Ayurveda'],
+        evidence: 8.7, community: 9.1, tradition: 9.5,
+        why: ['A versatile adaptogen for overall resilience', 'Strong evidence base across stress, sleep, and vitality', 'A widely trusted starting point for general wellness'],
+        products: [P('Organic Ashwagandha Root Extract (KSM-66)', '95/100', '300–600mg daily', 'Consult a professional if on thyroid or sedative medication; avoid in pregnancy')],
+        compare: { rows: [['Quality score', cmp('95/100', '89/100', '91/100')], ['Third-party tested', cmp('Yes', 'Yes', 'No')], ['Std. dosage', cmp('600mg', '500mg', '450mg')], ['Price / mo', cmp('$22', '$17', '$25')]] } },
+      { name: 'Turmeric (Curcumin)', latin: 'Curcuma longa', tier: 't3',
+        benefits: ['Anti-inflammatory', 'Whole-body support'],
+        evidence: 8.6, community: 8.8, tradition: 9.5,
+        why: ['Broad anti-inflammatory support', 'One of the most studied botanicals available', 'Pairs well with most wellness routines'],
+        products: [P('Curcumin Extract (with piperine)', '94/100', '500mg standardized daily', 'Interacts with blood thinners; use bioavailable forms')] },
+      { name: 'Ginger', latin: 'Zingiber officinale', tier: 't2',
+        benefits: ['Digestion', 'Anti-inflammatory'],
+        evidence: 7.8, community: 8.5, tradition: 9.4,
+        why: ['A gentle, multi-purpose everyday botanical', 'Good evidence for digestion and inflammation', 'Low-risk and easy to incorporate'],
+        products: [P('Ginger Root Extract', '90/100', '500–1000mg daily', 'High doses may interact with blood thinners')] }
+    ]
+  };
+
+  /* ---------- ranking by preferred approach ---------- */
+  function rankHerbs(goal, approach) {
+    var list = (HERBS[goal] || HERBS.other).slice();
+    var w;
+    if (approach === 'science') w = { e: 0.6, c: 0.2, t: 0.2 };
+    else if (approach === 'tradition') w = { e: 0.2, c: 0.2, t: 0.6 };
+    else if (approach === 'community') w = { e: 0.2, c: 0.6, t: 0.2 };
+    else w = { e: 0.34, c: 0.33, t: 0.33 };
+    list.forEach(function (h) { h._match = h.evidence * w.e + h.community * w.c + h.tradition * w.t; });
+    list.sort(function (a, b) { return b._match - a._match; });
+    return list.slice(0, 3);
+  }
+
+  /* ===================================================================
+     WIZARD STATE + RENDERING
+     =================================================================== */
+  var state = { idx: 0, answers: {}, message: '' };
+  var TOTAL_STEPS = 7; // 6 questions + message step
+
+  var overlay = document.getElementById('wizOverlay');
+  var body = document.getElementById('wizBody');
+  var foot = document.getElementById('wizFoot');
+  var backBtn = document.getElementById('wizBack');
+  var nextBtn = document.getElementById('wizNext');
+  var bar = document.getElementById('wizProgressBar');
+  var stepName = document.getElementById('wizStepName');
+  var pctEl = document.getElementById('wizPct');
+  var progressWrap = document.getElementById('wizProgressWrap');
+
+  function openWizard() {
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+    state.idx = 0; state.answers = {}; state.message = '';
+    foot.style.display = 'flex';
+    render();
+  }
+  function closeWizard() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function setProgress() {
+    var pct = Math.round((state.idx / TOTAL_STEPS) * 100);
+    bar.style.width = pct + '%';
+    pctEl.textContent = pct + '%';
+    if (state.idx < QUESTIONS.length) stepName.textContent = 'Step ' + (state.idx + 1) + ' of ' + TOTAL_STEPS;
+    else stepName.textContent = 'Step 7 of ' + TOTAL_STEPS;
+  }
+
+  function render() {
+    progressWrap.style.display = '';
+    if (state.idx < QUESTIONS.length) renderQuestion(QUESTIONS[state.idx]);
+    else renderMessageStep();
+    setProgress();
+    backBtn.disabled = state.idx === 0;
+  }
+
+  function renderQuestion(q) {
+    var selected = state.answers[q.key];
+    var html = '<div class="wiz-step active">' +
+      '<div class="wiz-q-label">' + q.label + '</div>' +
+      '<div class="wiz-q-title">' + q.title + '</div>' +
+      '<div class="wiz-q-sub">' + q.sub + '</div>' +
+      '<div class="opt-grid' + (q.options.length <= 4 ? ' ' : ' ') + '">';
+    q.options.forEach(function (o) {
+      var sel = selected === o.v ? ' selected' : '';
+      html += '<button class="opt' + sel + '" data-val="' + o.v + '">' +
+        '<span class="opt-mark"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5l2.5 2.5 4.5-5"/></svg></span>' +
+        '<span>' + o.l + '</span></button>';
+    });
+    html += '</div></div>';
+    body.innerHTML = html;
+
+    body.querySelectorAll('.opt').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        state.answers[q.key] = btn.getAttribute('data-val');
+        body.querySelectorAll('.opt').forEach(function (b) { b.classList.remove('selected'); });
+        btn.classList.add('selected');
+        nextBtn.disabled = false;
+        // brief auto-advance feel: enable next; do not auto-skip so users can review
+      });
+    });
+    nextBtn.disabled = !selected;
+    nextBtn.innerHTML = (state.idx === QUESTIONS.length - 1) ? 'Continue <span>→</span>' : 'Continue <span>→</span>';
+  }
+
+  function renderMessageStep() {
+    var html = '<div class="wiz-step active">' +
+      '<div class="wiz-q-label">Step 7 · Tell us more</div>' +
+      '<div class="wiz-q-title">Tell us more about your situation</div>' +
+      '<div class="wiz-q-sub">Optional, but it makes your recommendation far more personal. A sentence or two is plenty.</div>' +
+      '<textarea class="wiz-textarea" id="wizMsg" placeholder="In your own words…">' + (state.message ? escapeHtml(state.message) : '') + '</textarea>' +
+      '<div class="wiz-example"><strong>Example:</strong> “I’ve been struggling with sleep because of work stress. I wake up multiple times at night and would prefer natural remedies before trying medication.”</div>' +
+      '<div class="wiz-skip-note">Leave it blank to skip — your six answers are enough to generate results.</div>' +
+      '</div>';
+    body.innerHTML = html;
+    var ta = document.getElementById('wizMsg');
+    ta.addEventListener('input', function () { state.message = ta.value; });
+    nextBtn.disabled = false;
+    nextBtn.innerHTML = 'Generate my profile <span>→</span>';
+  }
+
+  /* ---------- navigation ---------- */
+  nextBtn.addEventListener('click', function () {
+    if (state.idx < QUESTIONS.length) {
+      if (!state.answers[QUESTIONS[state.idx].key]) return;
+      state.idx++;
+      render();
+    } else {
+      generateResults();
+    }
+  });
+  backBtn.addEventListener('click', function () {
+    if (state.idx > 0) { state.idx--; render(); }
+  });
+
+  /* ===================================================================
+     INSIGHT ENGINE — Groq-backed with local fallback
+     =================================================================== */
+  function buildFallbackInsight() {
+    var a = state.answers;
+    var goalL = GOAL_LABEL[a.goal] || 'General Wellness';
+    var secondary = detectSecondary() || SECONDARY_DEFAULT[a.goal] || 'Overall Wellbeing';
+    var expL = EXPERIENCE_LABEL[a.experience] || 'Beginner';
+    var narrative = 'Based on your responses, your focus is ' + goalL.toLowerCase() +
+      ', described as ' + (SEVERITY_LABEL[a.severity] || 'a concern').toLowerCase() +
+      ' and present for ' + (DURATION_LABEL[a.duration] || 'some time').toLowerCase() +
+      '. As ' + (expL === 'Beginner' ? 'someone new to herbal remedies' : 'a' + (expL === 'Experienced' ? 'n experienced' : 'n intermediate') + ' user') +
+      ', you prefer ' + (APPROACH_LABEL[a.approach] || 'a balanced approach').toLowerCase() + '. ' +
+      'We\'ve matched remedies that fit that profile while keeping your safety front and center.';
+    var note = a.meds === 'yes'
+      ? 'Because you’re currently taking medication, please consult a healthcare professional before starting any new herb — we’ve flagged interaction notes on each match.'
+      : (a.meds === 'prefer'
+        ? 'You preferred not to share medication details — if you do take any, check the safety notes and your provider before starting.'
+        : 'No medications disclosed, but always start low and watch how you respond.');
+    return { profileNarrative: narrative, secondaryConcern: secondary, personalizedNote: note, herbNotes: {} };
+  }
+
+  function detectSecondary() {
+    var m = (state.message || '').toLowerCase();
+    if (!m) return null;
+    var map = [
+      ['Stress Management', /stress|anxious|anxiety|overwhelm|burnout|tense|worry/],
+      ['Sleep Quality', /sleep|insomnia|awake|night|rest|tired in the morning/],
+      ['Energy & Focus', /energy|fatigue|focus|concentrat|brain fog|exhaust/],
+      ['Digestion', /digest|bloat|stomach|gut|ibs|nausea/],
+      ['Inflammation', /inflam|joint|pain|ache|sore/],
+      ['Mood Support', /mood|down|sad|low|depress/]
+    ];
+    for (var i = 0; i < map.length; i++) {
+      if (map[i][1].test(m) && map[i][0].toLowerCase() !== (GOAL_LABEL[state.answers.goal] || '').toLowerCase()) return map[i][0];
+    }
+    return null;
+  }
+
+  function generateResults() {
+    foot.style.display = 'none';
+    progressWrap.style.display = 'none';
+    stepName.textContent = '';
+    bar.style.width = '100%'; pctEl.textContent = '100%';
+    body.innerHTML = '<div class="wiz-loading">' +
+      '<div class="wiz-spinner"></div>' +
+      '<div class="wiz-loading-text">Building your Blumiin Wellness Profile…</div>' +
+      '<div class="wiz-loading-sub">Cross-referencing evidence, tradition & community data</div>' +
+      '</div>';
+
+    var topHerbs = rankHerbs(state.answers.goal, state.answers.approach);
+    var payload = {
+      answers: {
+        goal: GOAL_LABEL[state.answers.goal],
+        severity: SEVERITY_LABEL[state.answers.severity],
+        duration: DURATION_LABEL[state.answers.duration],
+        approach: APPROACH_LABEL[state.answers.approach],
+        experience: EXPERIENCE_LABEL[state.answers.experience],
+        medications: state.answers.meds
+      },
+      message: state.message || '',
+      herbs: topHerbs.map(function (h) { return h.name; })
+    };
+
+    fetchInsight(payload).then(function (insight) {
+      renderResults(topHerbs, insight);
+    }).catch(function () {
+      renderResults(topHerbs, buildFallbackInsight());
+    });
+  }
+
+  function fetchInsight(payload) {
+    return new Promise(function (resolve, reject) {
+      var ctrl = new AbortController();
+      var timeout = setTimeout(function () { ctrl.abort(); }, 12000);
+      fetch('/api/insight', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        signal: ctrl.signal
+      }).then(function (r) {
+        clearTimeout(timeout);
+        if (!r.ok) throw new Error('bad status');
+        return r.json();
+      }).then(function (data) {
+        if (!data || !data.profileNarrative) { resolve(buildFallbackInsight()); return; }
+        // merge with fallback defaults for any missing field
+        var fb = buildFallbackInsight();
+        resolve({
+          profileNarrative: data.profileNarrative || fb.profileNarrative,
+          secondaryConcern: data.secondaryConcern || fb.secondaryConcern,
+          personalizedNote: data.personalizedNote || fb.personalizedNote,
+          herbNotes: data.herbNotes || {}
+        });
+      }).catch(function (e) { clearTimeout(timeout); reject(e); });
+    });
+  }
+
+  /* ===================================================================
+     RESULTS RENDERING
+     =================================================================== */
+  function renderResults(topHerbs, insight) {
+    var a = state.answers;
+    var goalL = GOAL_LABEL[a.goal] || 'General Wellness';
+    var riskText = a.meds === 'yes'
+      ? 'Currently taking medication — consult a professional before trying new herbs'
+      : (a.meds === 'prefer' ? 'Medication status not disclosed — review safety notes carefully' : 'No medications disclosed');
+
+    var h = '<div class="wiz-step active">';
+
+    /* Insight engine header + narrative */
+    h += '<div class="res-hero">' +
+      '<div class="res-badge">Step 3 · Blumiin Insight Engine</div>' +
+      '<h3>Your Blumiin Wellness Profile</h3>' +
+      '</div>';
+    h += '<p style="font-size:15px;line-height:1.65;opacity:0.85;margin-bottom:8px;">' + escapeHtml(insight.profileNarrative) + '</p>';
+
+    /* Profile checklist */
+    h += '<div class="res-block-label">Based on your responses</div>';
+    h += '<div class="profile-card">';
+    h += profileRow('Primary Goal', goalL);
+    h += profileRow('Secondary Concern', insight.secondaryConcern);
+    h += profileRow('Preferred Approach', APPROACH_LABEL[a.approach]);
+    h += profileRow('Experience Level', EXPERIENCE_LABEL[a.experience]);
+    h += profileRow('Severity & Duration', (SEVERITY_LABEL[a.severity]) + ' · ' + (DURATION_LABEL[a.duration]));
+    h += profileRow('Risk Factors', riskText, a.meds === 'yes' || a.meds === 'prefer');
+    h += '</div>';
+
+    /* Recommendations */
+    h += '<div class="res-block-label">Step 4 · Recommended for you</div>';
+    topHerbs.forEach(function (herb, i) {
+      h += renderHerbCard(herb, i, insight.herbNotes && insight.herbNotes[herb.name]);
+    });
+
+    /* Products */
+    h += '<div class="res-block-label">Step 6 · Product recommendations</div>';
+    topHerbs.forEach(function (herb) {
+      (herb.products || []).forEach(function (p) { h += renderProduct(herb, p); });
+    });
+    /* Compare table for #1 herb */
+    var lead = topHerbs[0];
+    if (lead && lead.compare) {
+      h += '<div style="font-family:var(--mono);font-size:11px;color:var(--stone);letter-spacing:0.04em;text-transform:uppercase;margin:18px 0 10px;">Compare products · ' + escapeHtml(lead.name) + '</div>';
+      h += renderCompare(lead.compare);
+    }
+
+    /* Expert guidance */
+    h += '<div class="res-block-label">Step 7 · Need expert guidance?</div>';
+    h += '<div class="expert-card">' +
+      '<div class="expert-top">' +
+      '<div class="expert-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 14s1.5 2 4 2 4-2 4-2"/><circle cx="12" cy="11" r="9"/></svg></div>' +
+      '<div><div class="expert-title">Talk to a verified expert</div>' +
+      '<div class="expert-text">' + (a.meds === 'yes' ? 'Because you’re taking medication, a quick conversation with a verified herbal-wellness expert or therapist is the safest next step.' : 'Based on your responses, you may benefit from speaking with a verified therapist or herbal-wellness expert before you begin.') + '</div></div></div>' +
+      '<div class="expert-options">' +
+      expertOpt('15 min', 'Quick Guidance') +
+      expertOpt('30 min', 'Personalized Plan') +
+      expertOpt('60 min', 'Full Wellness Assessment') +
+      '</div></div>';
+
+    /* Follow-up */
+    h += '<div class="res-block-label">Step 8 · We’ll check in</div>';
+    h += '<div class="followup-card">' +
+      '<div class="followup-when">In 7 days</div>' +
+      '<div class="followup-q">How are you feeling since starting your herbal wellness journey?</div>' +
+      '<div class="followup-opts">' +
+      '<button class="followup-opt">Much better</button>' +
+      '<button class="followup-opt">Slightly better</button>' +
+      '<button class="followup-opt">No change</button>' +
+      '<button class="followup-opt">Worse</button>' +
+      '</div>' +
+      '<div class="followup-note">Blumiin adjusts your recommendations and tracks your progress on My Shelf based on what you tell us.</div>' +
+      '</div>';
+
+    /* personalized note + disclaimer */
+    h += '<div class="res-disclaimer">' +
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>' +
+      '<div>' + escapeHtml(insight.personalizedNote) + ' Blumiin provides educational information, not medical advice.</div>' +
+      '</div>';
+
+    /* actions */
+    h += '<div class="res-actions">' +
+      '<button class="btn-finder" id="wizBook"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg> Book a consultation</button>' +
+      '<button class="res-restart" id="wizRestart">↺ Start over</button>' +
+      '</div>';
+
+    h += '</div>';
+    body.innerHTML = h;
+
+    // wire interactions
+    body.querySelectorAll('.herb-why-toggle').forEach(function (t) {
+      t.addEventListener('click', function () { t.closest('.herb-why').classList.toggle('open'); });
+    });
+    var restart = document.getElementById('wizRestart');
+    if (restart) restart.addEventListener('click', function () {
+      foot.style.display = 'flex'; state.idx = 0; state.answers = {}; state.message = ''; render();
+      body.scrollTop = 0; overlay.scrollTop = 0;
+    });
+    var followBtns = body.querySelectorAll('.followup-opt');
+    followBtns.forEach(function (b) {
+      b.addEventListener('click', function () {
+        followBtns.forEach(function (x) { x.style.borderColor = ''; x.style.background = ''; x.style.color = ''; });
+        b.style.borderColor = 'var(--bottle)'; b.style.background = 'var(--bottle)'; b.style.color = 'var(--paper)';
+      });
+    });
+    overlay.scrollTop = 0;
+  }
+
+  function profileRow(label, val, risk) {
+    return '<div class="profile-row' + (risk ? ' risk' : '') + '">' +
+      '<span class="pcheck"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 6.5l2.5 2.5 4.5-5"/></svg></span>' +
+      '<span><b>' + escapeHtml(label) + ':</b> ' + escapeHtml(val) + '</span></div>';
+  }
+
+  function renderHerbCard(herb, i, personalNote) {
+    var tier = herb.tier;
+    var benefits = herb.benefits.map(function (b) { return '<span class="herb-benefit">' + escapeHtml(b) + '</span>'; }).join('');
+    var why = herb.why.map(function (w) { return '<li>' + escapeHtml(w) + '</li>'; }).join('');
+    if (personalNote) why = '<li><b>' + escapeHtml(personalNote) + '</b></li>' + why;
+    var h = '<div class="herb-card">' +
+      '<div class="herb-head">' +
+      '<div class="herb-art">' + SPRIG + '</div>' +
+      '<div class="herb-info">' +
+      '<div class="herb-name">' + escapeHtml(herb.name) + '</div>' +
+      '<div class="herb-benefits">' + benefits + '</div>' +
+      '<div style="margin-top:10px;"><span class="tag ' + tier + '">' + tierLabel(tier) + '</span></div>' +
+      '</div>' +
+      '<div class="herb-rank">#' + (i + 1) + '</div>' +
+      '</div>' +
+      '<div class="herb-why">' +
+      '<button class="herb-why-toggle">Why we recommended this <span class="chev">▾</span></button>' +
+      '<div class="herb-why-content"><div class="herb-why-inner">' +
+      '<ul class="why-list">' + why + '</ul>' +
+      '<div class="score-grid">' +
+      scoreBox('Evidence', herb.evidence, 'evi') +
+      scoreBox('Community', herb.community, 'com') +
+      scoreBox('Traditional', herb.tradition, 'tra') +
+      '</div>' +
+      '</div></div>' +
+      '</div>' +
+      '</div>';
+    return h;
+  }
+
+  function scoreBox(label, val, cls) {
+    return '<div class="score-box"><div class="sb-label">' + label + ' score</div>' +
+      '<div class="sb-num">' + val.toFixed(1) + '<small>/10</small></div>' +
+      '<div class="sb-bar ' + cls + '"><i style="width:' + (val * 10) + '%"></i></div></div>';
+  }
+
+  function renderProduct(herb, p) {
+    return '<div class="product-card">' +
+      '<div class="product-top">' +
+      '<div><div class="product-name">' + escapeHtml(p.name) + '</div>' +
+      '<div class="product-for">For your ' + escapeHtml(herb.name) + ' match</div></div>' +
+      '<span class="quality-pill"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M20 6 9 17l-5-5"/></svg> Quality ' + escapeHtml(p.quality) + '</span>' +
+      '</div>' +
+      '<div class="product-attrs">' +
+      productAttr(p.tested ? 'Third-party tested for purity & potency' : 'Independent testing recommended', !p.tested) +
+      productAttr('Dosage: ' + p.dosage, false) +
+      productAttr('Safety: ' + p.safety, true) +
+      productAttr('Sourced & traceable to origin', false) +
+      '</div></div>';
+  }
+  function productAttr(text, warn) {
+    var ic = warn
+      ? '<svg class="pa-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 9v4M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/></svg>'
+      : '<svg class="pa-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+    return '<div class="product-attr' + (warn ? ' warn' : '') + '">' + ic + '<span>' + escapeHtml(text) + '</span></div>';
+  }
+
+  function renderCompare(c) {
+    var h = '<div class="compare-wrap">' +
+      '<div class="compare-row head"><div class="compare-cell"></div><div class="compare-cell">Brand A</div><div class="compare-cell">Brand B</div><div class="compare-cell">Brand C</div></div>';
+    c.rows.forEach(function (row) {
+      h += '<div class="compare-row">' +
+        '<div class="compare-cell metric">' + escapeHtml(row[0]) + '</div>' +
+        '<div class="compare-cell"><span class="best">' + escapeHtml(row[1].a) + '</span></div>' +
+        '<div class="compare-cell">' + escapeHtml(row[1].b) + '</div>' +
+        '<div class="compare-cell">' + escapeHtml(row[1].c) + '</div>' +
+        '</div>';
+    });
+    h += '</div>';
+    return h;
+  }
+
+  function expertOpt(dur, name) {
+    return '<button class="expert-opt"><div class="expert-opt-dur">' + dur + '</div><div class="expert-opt-name">' + name + '</div></button>';
+  }
+
+  function escapeHtml(s) {
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function (m) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[m];
+    });
+  }
+
+  /* ---------- wire up open/close triggers ---------- */
+  document.querySelectorAll('[data-open-wizard]').forEach(function (el) {
+    el.addEventListener('click', function (e) { e.preventDefault(); openWizard(); });
+  });
+  document.getElementById('wizClose').addEventListener('click', closeWizard);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) closeWizard(); });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && overlay.classList.contains('open')) closeWizard(); });
+
+  // expose for the "Book a consultation" button (added after render)
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'wizBook') {
+      var ex = document.querySelector('.expert-card');
+      if (ex) ex.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+})();
+
+</script>
+</body>
+</html>
