@@ -2,6 +2,16 @@
 
 A single-page herbal-discovery site with an interactive, AI-personalized wellness assessment.
 
+## Screenshots
+
+![Blumiin, the live page](docs/screenshots/blumiin-1.webp)
+
+*Blumiin, the live page.*
+
+![The six-question assessment](docs/screenshots/blumiin-assessment.webp)
+
+*The six-question assessment.*
+
 ## Files
 
 ```
